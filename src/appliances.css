@@ -1,0 +1,171 @@
+/* Appliance estimator: reference-inspired table and live system summary. */
+.header { position: sticky; top: 0; z-index: 40 }
+html { scroll-padding-top: 115px }
+.appliance-section { background: #fff }
+.appliance-section-heading { max-width: 510px }
+.appliance-section-heading .eyebrow { display: flex; align-items: center; gap: 10px; color: #5d6e7d; font-size: 10px; font-weight: 500; letter-spacing: 2px }
+.appliance-section-heading .eyebrow > span { width: 24px; height: 3px; background: var(--yellow) }
+.appliance-section-heading h2 { font-size: clamp(30px, 3.5vw, 44px); letter-spacing: -1.5px; line-height: 1.15; color: #103047 }
+.appliance-section-heading > p { font-size: 14px; line-height: 1.85; margin-top: 18px; color: #637482 }
+.calculator-mode { display: inline-flex; border: 1px solid #dce3e8; border-radius: 6px; margin: 28px 0 24px; padding: 4px; gap: 4px; background: #f7f9fa }
+.calculator-mode button { min-height: 44px; padding: 10px 18px; border-radius: 4px; background: none; font-size: 13px; color: #657787; font-weight: 600 }
+.calculator-mode button[aria-pressed='true'] { color: #16364d; background: white; box-shadow: 0 1px 5px #122e4614 }
+.appliance-layout { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(340px, 1fr); gap: 28px; align-items: start }
+.appliance-editor { border: 1px solid #dce4e9; border-radius: 7px; overflow: hidden; background: #f3f6f8; min-width: 0 }
+.appliance-table-heading { display: flex; justify-content: space-between; align-items: center; padding: 17px 18px; gap: 12px; border-bottom: 1px solid #dce4e9 }
+.appliance-table-heading h3 { font-size: 15px; letter-spacing: -.3px }
+.appliance-table-heading p { font-size: 11px; color: #758390 }
+.appliance-table { width: 100%; border-collapse: collapse; table-layout: fixed; text-align: left }
+.appliance-table th:first-child { width: 36% }
+.appliance-table th:nth-child(2) { width: 22% }
+.appliance-table th:nth-child(3) { width: 20% }
+.appliance-table th:nth-child(4) { width: 22% }
+.appliance-table thead th { text-transform: uppercase; letter-spacing: 1.6px; font-size: 9px; font-weight: 500; color: #7a8996; padding: 11px 10px; border-bottom: 1px solid #d9e2e9 }
+.appliance-table thead th:first-child { padding-left: 18px }
+.appliance-table tbody th { font-weight: 500; font-size: 12px; padding: 10px 12px 10px 18px; line-height: 1.6; overflow-wrap: anywhere }
+.appliance-table tbody td { padding: 8px 10px }
+.appliance-table tbody tr { border-bottom: 1px solid #dce4e9 }
+.appliance-table input { font-family: 'DM Sans', sans-serif; font-size: 16px; width: 100%; min-width: 0; height: 40px; min-height: 40px; padding: 8px; margin: 0; border: 1px solid #dce4e9; border-radius: 4px; background: #fff; appearance: textfield; -moz-appearance: textfield }
+.appliance-table input::-webkit-inner-spin-button, .appliance-table input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0 }
+.appliance-number { display: flex; align-items: center; gap: 4px }
+.appliance-number > span { font-size: 10px; color: #81919e }
+.appliance-table input:disabled { background: #f7f9fa; color: #97a6b1; opacity: 1; -webkit-text-fill-color: #97a6b1 }
+.appliance-inactive th { color: #899ba7 }
+.appliance-table input[aria-invalid='true'] { border-color: #b34b37 }
+.quantity-control { display: flex; align-items: center; justify-content: space-between; background: white; border: 1px solid #dce4e9; border-radius: 4px; min-width: 90px; width: 100%; overflow: hidden }
+.quantity-control button { min-height: 40px; width: 32px; flex-shrink: 0; background: none; display: grid; place-items: center; color: #14384f; padding: 0 }
+.quantity-control button:hover:not(:disabled) { background: #fff2cb }
+.quantity-control button:disabled { opacity: .4; cursor: default }
+.quantity-control output { font-size: 12px; font-weight: 600; min-width: 20px; text-align: center; font-variant-numeric: tabular-nums }
+.appliance-error { color: #993e2d; font-size: 12px; padding: 15px 18px; background: #fff0ec }
+.usage-patterns { margin: 0; border: 0; padding: 20px 18px 18px; min-width: 0 }
+.usage-patterns legend { float: left; width: 100%; padding: 0 0 15px; font-weight: 700; font-size: 12px; color: #203c50 }
+.usage-pattern-grid { clear: both; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px }
+.usage-pattern { display: flex; align-items: flex-start; gap: 7px; border: 1px solid #dce4e9; border-radius: 5px; background: white; padding: 13px 10px; cursor: pointer }
+.usage-pattern.selected { background: #fff3cd; border-color: #dfb645; box-shadow: inset 0 0 0 1px #efc65b40 }
+.usage-pattern input { width: 14px; height: 14px; min-height: 0; margin: 2px 0 0; flex-shrink: 0; accent-color: #a47c17 }
+.usage-pattern strong { font-size: 11px; color: #203c50; display: block; margin-bottom: 8px; line-height: 1.5 }
+.usage-pattern small { font-size: 10px; line-height: 1.7; color: #728390; display: block }
+.appliance-editor-footer { padding: 0 18px 18px; display: flex; gap: 15px; align-items: flex-start; justify-content: space-between }
+.appliance-editor-footer p { font-size: 10px; color: #7b8a97; max-width: 330px }
+.appliance-editor-footer button { display: inline-flex; align-items: center; gap: 7px; background: transparent; min-height: 44px; white-space: nowrap; font-size: 11px; color: #516c7f; padding: 0 }
+.appliance-result { position: sticky; top: 118px; border-radius: 7px; padding: 27px 26px 22px; background: #0d2c41; color: #fff; min-width: 0; box-shadow: 0 10px 30px #0d2c4109 }
+.appliance-result-eyebrow { text-transform: uppercase; color: #bdced9; font-size: 9px; letter-spacing: 2px; display: flex; align-items: center; gap: 9px; padding-bottom: 24px; border-bottom: 1px solid #ffffff12 }
+.appliance-result-eyebrow > span { width: 23px; height: 3px; background: var(--yellow) }
+.appliance-headline-results { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 0 0 21px; border-bottom: 1px solid #ffffff12 }
+.appliance-headline-results > div { min-width: 0; padding: 22px 10px 20px; border-right: 1px solid #ffffff12 }
+.appliance-headline-results > div:first-child { padding-left: 0 }
+.appliance-headline-results > div:last-child { border-right: 0; padding-right: 0 }
+.appliance-headline-results span { display: block; font-size: 8px; text-transform: uppercase; color: #c1d2dc; letter-spacing: 1px }
+.appliance-headline-results strong { font-family: 'Manrope', sans-serif; color: var(--yellow); font-size: clamp(27px, 2.5vw, 38px); font-weight: 800; line-height: 1.4; letter-spacing: -.9px; display: block; overflow-wrap: anywhere; font-variant-numeric: tabular-nums }
+.appliance-headline-results small { font-size: 10px; color: #d6e3eb; display: block }
+.appliance-details { margin: 0 0 25px; display: grid; gap: 20px }
+.appliance-details > div { display: flex; align-items: baseline; gap: 20px; justify-content: space-between }
+.appliance-details dt { font-size: 12px; color: #b4c8d5; line-height: 1.6 }
+.appliance-details dd { margin: 0; font-size: 13px; font-weight: 600; white-space: nowrap; letter-spacing: .1px; font-variant-numeric: tabular-nums }
+.appliance-result .button { font-size: 12px; gap: 12px; min-height: 49px }
+.appliance-result .button:disabled { opacity: .55; cursor: default; transform: none }
+.appliance-assumption { font-size: 11px; color: #b0c3d0; line-height: 1.8; margin-top: 16px }
+.appliance-method { font-size: 11px; margin-top: 17px; color: #bfd0db; line-height: 1.8 }
+.appliance-method summary { cursor: pointer; min-height: 44px; padding: 10px 0; color: #e0e8ed }
+.appliance-method p { margin-bottom: 12px }
+.appliance-planning-note { display: flex; align-items: flex-start; gap: 8px; padding-top: 15px; margin-top: 12px; border-top: 1px solid #ffffff1a; font-size: 10px; color: #91adbf; line-height: 1.7 }
+.appliance-planning-note svg { flex-shrink: 0; margin-top: 2px }
+.bill-calculator { padding-top: 25px }
+.bill-calculator .calculator-layout { width: 100% }
+.bill-calculator .centered { margin-bottom: 30px }
+.quote-appliance-details { font-size: 12px; color: #637482; margin: 12px 0 20px; line-height: 1.8 }
+.quote-appliance-details summary { cursor: pointer; min-height: 44px; padding: 10px 0; font-weight: 600; color: #24455c }
+.quote-appliance-details ul { padding-left: 20px }
+.quote-appliance-details p { margin-top: 7px }
+@media (max-width: 1100px) {
+  .appliance-layout { grid-template-columns: minmax(0, 1.4fr) minmax(315px, 1fr); gap: 20px }
+  .appliance-table tbody th { font-size: 11px; padding-left: 13px }
+  .appliance-table tbody td { padding: 8px 6px }
+  .appliance-table thead th { font-size: 8px; padding-left: 6px; letter-spacing: 1px }
+  .appliance-table th:first-child { width: 32% }
+  .appliance-table th:nth-child(4) { width: 26% }
+  .appliance-result { padding: 24px 20px }
+  .appliance-headline-results strong { font-size: 29px }
+  .usage-pattern-grid { grid-template-columns: 1fr }
+  .usage-pattern small { font-size: 12px }
+  .usage-pattern strong { font-size: 13px; margin-bottom: 5px }
+}
+@media (max-width: 900px) {
+  .appliance-layout { grid-template-columns: minmax(0, 1fr) }
+  .appliance-result { position: static; padding: 30px }
+  .appliance-section > .container { max-width: 740px; margin-left: auto; margin-right: auto; width: calc(100% - 48px) }
+  .appliance-table th:first-child { width: 36% }
+  .appliance-table th:nth-child(4) { width: 22% }
+  .appliance-table tbody th { font-size: 13px; padding: 12px 18px }
+  .appliance-table tbody td { padding: 8px 12px }
+  .appliance-table input { font-size: 16px; min-height: 44px; height: 44px }
+  .quantity-control button { min-height: 44px; min-width: 34px }
+  .quantity-control output { font-size: 14px }
+  .usage-pattern-grid { grid-template-columns: repeat(3, minmax(0, 1fr)) }
+  .usage-pattern { padding: 15px 12px }
+  .usage-pattern small { font-size: 11px }
+  .appliance-headline-results strong { font-size: 40px }
+  .appliance-headline-results span { font-size: 10px }
+  .appliance-headline-results small { font-size: 12px }
+  .appliance-details dt, .appliance-details dd { font-size: 14px }
+  .appliance-assumption, .appliance-method, .appliance-planning-note { font-size: 12px }
+  .appliance-result .button { font-size: 14px }
+  .appliance-editor-footer p { font-size: 12px }
+  .appliance-table-heading p { font-size: 12px }
+  .appliance-table-heading h3 { font-size: 17px }
+}
+@media (max-width: 600px) {
+  .appliance-section > .container { width: calc(100% - 40px) }
+  .appliance-section-heading > p { font-size: 14px }
+  .calculator-mode { display: flex }
+  .calculator-mode button { flex: 1; padding: 10px 8px; font-size: 12px }
+  .appliance-table-heading { display: block; padding: 19px 16px }
+  .appliance-table-heading p { margin-top: 5px }
+  .appliance-table, .appliance-table tbody { display: block }
+  .appliance-table thead { position: absolute; height: 1px; width: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap }
+  .appliance-table tbody tr { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); padding: 16px; gap: 12px }
+  .appliance-table tbody th { grid-column: 1 / -1; width: auto; padding: 0; font-size: 14px }
+  .appliance-table tbody td { display: flex; flex-direction: column; min-width: 0; padding: 0; gap: 6px }
+  .appliance-table tbody td::before { content: attr(data-label); font-size: 11px; color: #788a97; line-height: 1.6 }
+  .appliance-table tbody td:last-child { grid-column: 1 / -1; flex-direction: row; justify-content: space-between; align-items: center }
+  .appliance-number { gap: 6px }
+  .appliance-number > span { font-size: 12px }
+  .quantity-control { width: 140px; min-width: 140px }
+  .quantity-control button { min-width: 44px; min-height: 44px }
+  .usage-pattern-grid { grid-template-columns: minmax(0, 1fr) }
+  .usage-patterns { padding: 20px 16px }
+  .usage-patterns legend { font-size: 13px; line-height: 1.7 }
+  .usage-pattern { padding: 16px; gap: 10px }
+  .usage-pattern strong { font-size: 14px }
+  .usage-pattern small { font-size: 12px }
+  .usage-pattern input { height: 18px; width: 18px }
+  .appliance-editor-footer { flex-direction: column; padding: 0 16px 17px; gap: 5px }
+  .appliance-editor-footer button { font-size: 12px }
+  .appliance-result { padding: 23px 20px }
+  .appliance-headline-results > div { padding: 20px 8px }
+  .appliance-headline-results strong { font-size: clamp(25px, 8vw, 36px) }
+  .appliance-headline-results span { font-size: 8px; line-height: 1.7; letter-spacing: .5px }
+  .appliance-headline-results small { font-size: 10px }
+  .appliance-details > div { gap: 12px }
+  .appliance-details dt { font-size: 12px }
+  .appliance-details dd { font-size: 13px }
+  .appliance-result .button { font-size: 12px; padding: 10px; gap: 8px; line-height: 1.6 }
+  .bill-calculator .section-heading { padding: 0 }
+}
+@media (pointer: coarse) {
+  .appliance-table input { font-size: 16px; min-height: 44px; height: 44px }
+  .quantity-control button { min-height: 44px }
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto } }
+
+.appliance-mobile-summary { display: none }
+#appliance-estimate { scroll-margin-top: 80px }
+@media (max-width: 900px) {
+  .appliance-mobile-summary { position: sticky; top: calc(77px + env(safe-area-inset-top, 0px)); z-index: 20; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)) 18px; align-items: center; gap: 8px; padding: 12px 15px; border-radius: 5px; background: #0d2c41; box-shadow: 0 4px 16px #0d2c4126; color: var(--yellow) }
+  .appliance-mobile-summary small { display: block; color: #c3d4df; font-size: 9px; line-height: 1.5 }
+  .appliance-mobile-summary strong { display: block; font-size: 13px; line-height: 1.7; font-variant-numeric: tabular-nums; overflow-wrap: anywhere }
+}
+@media (max-width: 600px) {
+  .appliance-table tbody th:first-child { width: 100% }
+}

@@ -1,7 +1,8 @@
 import type { EstimateInput, EstimateResult } from '../features/calculator/calculation'
+import type { QuoteEstimate } from '../features/calculator/types'
 export interface Project { id: string; title: string; image: string; alt: string; approved: boolean; location?: string; capacityKwp?: number }
 export interface Testimonial { id: string; displayName: string; text: string; approved: boolean; location?: string }
-export interface QuoteRequest { name: string; contact: string; province: string; city: string; system: string; message?: string; consent: boolean; estimate?: EstimateResult }
+export interface QuoteRequest { name: string; contact: string; province: string; city: string; system: string; message?: string; consent: boolean; estimate?: QuoteEstimate }
 export interface EstimateResponse { input: EstimateInput; result: EstimateResult }
 // Future API adapters. No endpoint is called until a backend is configured and verified.
 export const publicApi = {
