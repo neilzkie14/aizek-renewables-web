@@ -1,0 +1,597 @@
+/* Shared mobile-browser foundations. Keep text zoom and pinch zoom available. */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+input,
+select,
+textarea {
+  /* iOS Safari zooms focused text inputs below 16px. */
+  font-size: 16px;
+  max-width: 100%;
+}
+
+textarea {
+  resize: vertical;
+}
+
+.hero-layout,
+.services,
+.calculator-layout,
+.field-grid,
+.process-grid,
+.faq-section {
+  min-width: 0;
+}
+
+.hero-layout > *,
+.services > *,
+.calculator-layout > *,
+.field-grid > *,
+.process-grid > *,
+.faq-section > * {
+  min-width: 0;
+}
+
+.container {
+  width: auto;
+  margin-left: max(24px, env(safe-area-inset-left, 0px));
+  margin-right: max(24px, env(safe-area-inset-right, 0px));
+}
+
+@media (min-width: 1296px) {
+  .container {
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+.header {
+  height: auto;
+  min-height: 94px;
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
+.nav {
+  min-height: 94px;
+}
+
+.footer-bottom {
+  padding-bottom: max(22px, env(safe-area-inset-bottom, 0px));
+}
+
+.modal-backdrop {
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  padding: max(20px, env(safe-area-inset-top, 0px))
+    max(20px, env(safe-area-inset-right, 0px))
+    max(20px, env(safe-area-inset-bottom, 0px))
+    max(20px, env(safe-area-inset-left, 0px));
+}
+
+.quote-modal {
+  flex-shrink: 0;
+  overflow-wrap: anywhere;
+}
+
+.menu-toggle,
+.modal-close,
+.carousel-controls button,
+.carousel-dots button {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.menu-toggle,
+.modal-close {
+  display: grid;
+  place-items: center;
+}
+
+.menu-toggle {
+  display: none;
+}
+
+.carousel-dots button::after {
+  top: calc(50% - 3px);
+  left: calc(50% - 3px);
+}
+
+.carousel-dots .active::after {
+  left: calc(50% - 8px);
+}
+
+.checkbox {
+  min-height: 44px;
+  align-items: center;
+  cursor: pointer;
+}
+
+.checkbox input {
+  width: 20px;
+  height: 20px;
+  margin-top: 0;
+}
+
+@media (hover: none), (pointer: coarse) {
+  .button:hover {
+    transform: none;
+  }
+
+  .button,
+  .system,
+  .segmented button,
+  .advanced,
+  .text-button,
+  .text-link,
+  .small-link,
+  .back-top,
+  .service-card > a,
+  .footer-links a {
+    min-height: 44px;
+  }
+
+  .service-card > a {
+    min-width: 44px;
+    display: grid;
+    place-items: center;
+  }
+
+  .footer-links a,
+  .text-link {
+    display: inline-flex;
+    align-items: center;
+  }
+}
+
+/* iPad / Android tablet portrait and smaller laptop windows. */
+@media (max-width: 1024px) {
+  .header,
+  .nav {
+    min-height: 77px;
+  }
+
+  .menu-toggle {
+    display: grid;
+  }
+
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: calc(77px + env(safe-area-inset-top, 0px));
+    left: 0;
+    right: 0;
+    z-index: 30;
+    padding: 16px max(24px, env(safe-area-inset-right, 0px)) 24px
+      max(24px, env(safe-area-inset-left, 0px));
+    background: var(--navy);
+    box-shadow: 0 20px 25px #0002;
+    max-height: calc(100vh - 77px);
+    max-height: calc(100dvh - 77px - env(safe-area-inset-top, 0px));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .nav-links.open {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+  }
+
+  .nav-links > a {
+    display: flex;
+    align-items: center;
+    min-height: 48px;
+    padding: 12px 0;
+    font-size: 15px;
+  }
+
+  .nav-quote {
+    margin-top: 12px;
+    min-height: 48px;
+    font-size: 14px;
+  }
+
+  .services {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+  }
+
+  .service-card {
+    min-height: 230px;
+  }
+
+  .service-card h3,
+  .process-step h3 {
+    font-size: 16px;
+  }
+
+  .service-card p,
+  .service-intro > p,
+  .process-step p,
+  .faq-list details p,
+  .faq-intro p,
+  .testimonials-inner p {
+    font-size: 14px;
+  }
+
+  .section-heading > p {
+    font-size: 14px;
+  }
+
+  .process-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 32px;
+  }
+
+  .process-step p {
+    max-width: none;
+  }
+
+  .process-step:nth-child(2) .process-arrow {
+    display: none;
+  }
+
+  .faq-section {
+    gap: 36px;
+  }
+
+  .faq-list summary {
+    font-size: 14px;
+  }
+
+  .calculator-layout {
+    grid-template-columns: minmax(0, 1fr);
+    max-width: 680px;
+    width: calc(100% - 48px);
+  }
+
+  .results-card {
+    border-left: 0;
+    border-top: 1px solid var(--line);
+    padding: 32px;
+  }
+
+  .form-inner,
+  .card-title {
+    padding: 28px;
+  }
+
+  .system-options {
+    flex-direction: row;
+  }
+
+  .system {
+    padding: 16px;
+    gap: 12px;
+    min-height: 72px;
+  }
+
+  .system strong {
+    font-size: 14px;
+  }
+
+  .system small {
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  .system > svg {
+    width: 20px;
+  }
+
+  label,
+  .field-title,
+  .advanced,
+  .segmented button {
+    font-size: 14px;
+  }
+
+  .field-title {
+    line-height: 1.5;
+  }
+
+  .segmented button {
+    min-height: 44px;
+  }
+
+  input,
+  select {
+    min-height: 48px;
+  }
+
+  .input-affix > span {
+    font-size: 13px;
+  }
+
+  input::placeholder {
+    font-size: 14px;
+  }
+
+  .card-title h3 {
+    font-size: 18px;
+  }
+
+  .card-title p,
+  .field-hint,
+  .form-footnote,
+  .calculator-caption,
+  .results-card > p,
+  .result-checks,
+  .result-disclaimer p,
+  .result-grid span,
+  .assumptions,
+  .results-card .result-note,
+  .checkbox,
+  .integration-notice,
+  .quote-summary {
+    font-size: 12px;
+  }
+
+  .assumptions {
+    line-height: 1.7;
+  }
+
+  .full {
+    min-height: 48px;
+    font-size: 14px;
+  }
+
+  .small-link,
+  .text-button,
+  .text-link {
+    font-size: 13px;
+  }
+
+  .quote-modal > p {
+    font-size: 14px;
+  }
+
+  .quote-modal .field-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Phone layouts, including compact phones and tablet split-screen windows. */
+@media (max-width: 600px) {
+  .container {
+    margin-left: max(20px, env(safe-area-inset-left, 0px));
+    margin-right: max(20px, env(safe-area-inset-right, 0px));
+  }
+
+  .hero-copy > p {
+    font-size: 15px;
+    max-width: none;
+  }
+
+  h1 {
+    font-size: clamp(38px, 10.5vw, 52px);
+  }
+
+  .hero-actions {
+    flex-wrap: wrap;
+  }
+
+  .hero-actions .button {
+    flex: 1 1 180px;
+    min-height: 48px;
+    font-size: 14px;
+  }
+
+  .hero-note {
+    font-size: 11px;
+    line-height: 1.6;
+  }
+
+  .hero-note svg {
+    flex-shrink: 0;
+  }
+
+  .hero-eyebrow {
+    font-size: 9px;
+    line-height: 1.7;
+    letter-spacing: 1px;
+  }
+
+  .credibility > span {
+    font-size: 11px;
+  }
+
+  .services {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .service-intro,
+  .service-card:last-child {
+    grid-column: auto;
+  }
+
+  .service-card,
+  .service-card:last-child {
+    min-height: 190px;
+    padding: 24px;
+  }
+
+  .service-card:last-child p {
+    max-width: none;
+    padding-right: 30px;
+  }
+
+  .service-card .service-icon {
+    margin-bottom: 16px;
+  }
+
+  .service-card > a {
+    padding-top: 0;
+    min-height: 44px;
+    min-width: 44px;
+    display: grid;
+    place-items: center;
+  }
+
+  .eyebrow,
+  .service-intro .eyebrow,
+  .centered > .eyebrow,
+  .testimonials-inner .eyebrow {
+    font-size: 9px;
+    line-height: 1.7;
+    letter-spacing: 1px;
+  }
+
+  .project-info {
+    bottom: 82px;
+  }
+
+  .project-info p,
+  .gallery-footer p {
+    font-size: 11px;
+  }
+
+  .project-type,
+  .project-label {
+    font-size: 9px;
+  }
+
+  .gallery-footer {
+    flex-wrap: wrap;
+  }
+
+  .gallery-footer p {
+    flex: 1 1 150px;
+    max-width: none;
+  }
+
+  .carousel-dots {
+    margin-left: auto;
+  }
+
+  .calculator-layout {
+    width: calc(100% - 40px);
+  }
+
+  .form-inner,
+  .card-title {
+    padding: 20px;
+  }
+
+  .card-title .step-tag {
+    display: none;
+  }
+
+  .field-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+
+  .system {
+    flex: 1;
+    padding: 12px;
+    gap: 8px;
+  }
+
+  .system-options {
+    flex-direction: column;
+  }
+
+  .form-footnote {
+    flex-wrap: wrap;
+    row-gap: 2px;
+    line-height: 1.7;
+  }
+
+  .advanced {
+    text-align: left;
+    gap: 10px;
+    line-height: 1.6;
+  }
+
+  .advanced > span {
+    font-size: 11px;
+    flex-shrink: 0;
+  }
+
+  .results-card {
+    padding: 30px 20px;
+  }
+
+  .result-grid {
+    gap: 20px 12px;
+  }
+
+  .result-grid strong {
+    font-size: clamp(18px, 5.5vw, 24px);
+    overflow-wrap: anywhere;
+  }
+
+  .calculator-caption {
+    line-height: 1.8;
+  }
+
+  .process-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 28px;
+  }
+
+  .process-arrow {
+    display: none;
+  }
+
+  .testimonials-inner {
+    gap: 12px;
+  }
+
+  .bottom-cta p {
+    font-size: 14px;
+  }
+
+  .footer-links {
+    flex-wrap: wrap;
+    gap: 6px 22px;
+    font-size: 13px;
+  }
+
+  .back-top,
+  .footer-top p,
+  .footer-bottom {
+    font-size: 12px;
+    line-height: 1.8;
+  }
+
+  .back-top {
+    margin-left: 0;
+  }
+
+  .footer-top {
+    gap: 16px;
+  }
+
+  .quote-modal {
+    padding: 32px 20px 24px;
+  }
+
+  .quote-modal .field-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .modal-close {
+    top: 8px;
+    right: 8px;
+  }
+
+  .quote-modal > .eyebrow {
+    padding-right: 24px;
+  }
+}
+
+@media (max-height: 500px) and (orientation: landscape) {
+  .modal-backdrop {
+    align-items: flex-start;
+  }
+
+  .quote-modal {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+}
