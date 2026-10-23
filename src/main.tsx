@@ -7,5 +7,6 @@ import './styles.css'
 import './responsive.css'
 import './appliances.css'
 import './hero.css'
+import './energy-orb.css'
 const queryClient = new QueryClient()
 ReactDOM.createRoot(document.getElementById('root')!).render(<React.StrictMode><QueryClientProvider client={queryClient}><BrowserRouter><App /></BrowserRouter></QueryClientProvider></React.StrictMode>)

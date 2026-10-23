@@ -1,0 +1,173 @@
+.hero .hero-visual.energy-visual {
+  height: auto;
+  min-height: 443px;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: linear-gradient(145deg, rgb(8 27 46 / 88%), rgb(5 20 36 / 92%));
+  border: 1px solid rgb(204 220 237 / 20%);
+  border-radius: 18px;
+  padding: 18px 22px;
+  box-shadow: 0 22px 70px rgb(2 13 27 / 30%);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  overflow: hidden;
+}
+
+.energy-panel-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+  z-index: 2;
+}
+
+.energy-panel-heading > span {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 8px;
+  line-height: 1.7;
+  letter-spacing: 1.4px;
+  color: #d7e2ed;
+}
+
+.energy-panel-heading > span > svg {
+  color: var(--yellow);
+  flex-shrink: 0;
+}
+
+.energy-pause {
+  min-height: 44px;
+  padding: 8px 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid rgb(213 228 240 / 20%);
+  border-radius: 5px;
+  background: rgb(216 228 242 / 5%);
+  color: #dbe5ef;
+  font-size: 10px;
+  flex-shrink: 0;
+}
+
+.energy-pause:hover:not(:disabled) { background: rgb(216 228 242 / 12%) }
+.energy-pause:disabled { opacity: .65; cursor: default }
+.energy-pause:focus-visible { outline-color: var(--yellow) }
+
+.energy-orb-wrap {
+  width: min(100%, 375px);
+  align-self: center;
+  aspect-ratio: 1;
+  position: relative;
+  margin: 6px auto 9px;
+  isolation: isolate;
+}
+
+.energy-orb-wrap::before {
+  content: '';
+  position: absolute;
+  inset: 8%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgb(71 108 219 / 10%), transparent 68%);
+  box-shadow: 0 0 45px rgb(100 88 210 / 8%);
+  pointer-events: none;
+}
+
+.energy-stage {
+  display: block;
+  position: relative;
+  background: #0b2033;
+  border: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  overflow: hidden;
+  isolation: isolate;
+  cursor: crosshair;
+  touch-action: pan-y;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.energy-stage:focus-visible {
+  outline: 2px solid var(--yellow);
+  outline-offset: 4px;
+}
+
+.energy-stage picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+.energy-stage img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.energy-electricity {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 180ms ease-out;
+  clip-path: circle(46% at 50% 50%);
+}
+
+.energy-stage[data-active='true'] .energy-electricity { opacity: 1 }
+.energy-electricity path { fill: none; stroke-linecap: round; stroke-linejoin: round }
+.energy-arc-glow { stroke: #80b9ff; stroke-width: 10; filter: blur(6px); opacity: .8 }
+.energy-arc-branch { stroke: #a2c6ff; stroke-width: 1.3; opacity: .65 }
+.energy-arc-core { stroke: #fff3c5; stroke-width: 1.9; filter: drop-shadow(0 0 3px #f5c644) }
+.energy-contact { fill: #fff9e4; filter: drop-shadow(0 0 7px #f5c644) }
+.energy-origin { fill: #f2d27b; opacity: .5; filter: blur(4px) }
+
+.energy-panel-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  border-top: 1px solid rgb(213 228 240 / 14%);
+  padding-top: 15px;
+  position: relative;
+  z-index: 2;
+}
+
+.energy-panel-footer strong { color: #f1f5f8; font-size: 13px; letter-spacing: -.1px }
+.energy-panel-footer p { color: #acbdcf; font-size: 11px; margin-top: 5px; line-height: 1.7 }
+.energy-panel-footer > svg { color: var(--yellow); flex-shrink: 0 }
+
+@media (max-width: 1100px) {
+  .hero .hero-visual.energy-visual { min-height: 400px; padding: 16px }
+  .energy-panel-heading > span { font-size: 7px; letter-spacing: .8px }
+}
+
+@media (max-width: 800px) {
+  .hero .hero-visual.energy-visual { min-height: 340px; align-self: center; padding: 14px }
+  .energy-panel-heading { align-items: flex-start }
+  .energy-panel-heading > span { max-width: 135px }
+  .energy-pause { font-size: 9px; padding: 8px }
+  .energy-panel-footer p { font-size: 10px }
+}
+
+@media (max-width: 600px) {
+  .hero .hero-visual.energy-visual { min-height: 0; width: 100%; padding: 16px; margin: 0 }
+  .energy-panel-heading > span { font-size: 8px; max-width: none; letter-spacing: .8px }
+  .energy-orb-wrap { width: min(100%, 360px); margin-top: 10px; margin-bottom: 15px }
+  .energy-panel-footer p { font-size: 11px }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .energy-electricity { transition: none }
+}
