@@ -1,0 +1,65 @@
+/* Reference-style fills, using AIZEK's navy and sunshine palette. */
+:root {
+  --button-ease: cubic-bezier(.22, 1, .36, 1);
+  --button-fill: #16364d;
+  --button-fill-ink: #fff;
+  --button-soft-fill: #e5edf4;
+}
+[data-theme='dark'] {
+  --button-fill: #e5edf5;
+  --button-fill-ink: #102337;
+  --button-soft-fill: #283f54;
+}
+
+.button {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  transition: color .35s var(--button-ease), border-color .35s var(--button-ease), box-shadow .35s var(--button-ease);
+}
+.button:hover { transform: none }
+.button > svg { flex-shrink: 0; transition: transform .4s var(--button-ease) }
+.button::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: #fff;
+  transform: translateY(101%);
+  transition: transform .45s var(--button-ease);
+}
+.button.primary:is(:hover, :focus-visible):not(:disabled) { background: var(--yellow); color: var(--navy) }
+.button:is(:hover, :focus-visible):not(:disabled)::before { transform: translateY(0) }
+.button:is(:hover, :focus-visible):not(:disabled) > svg { transform: translateX(4px) }
+
+/* Only quote CTAs get the Track Order glow. */
+.button.quote-button {
+  box-shadow: 0 0 0 1px rgb(248 195 62 / 60%), 0 8px 28px -8px rgb(248 195 62 / 55%);
+}
+.button.quote-button:is(:hover, :focus-visible):not(:disabled) {
+  box-shadow: 0 0 0 1px rgb(248 195 62 / 90%), 0 0 30px -4px rgb(248 195 62 / 80%);
+}
+.button.outline::before { background: var(--button-fill); transform: scaleX(0); transform-origin: left center }
+.hero .button.outline:is(:hover, :focus-visible) { background: transparent; color: var(--button-fill-ink); border-color: var(--button-fill) }
+.button.outline:is(:hover, :focus-visible)::before { transform: scaleX(1) }
+
+/* Small controls get the same smooth color response without the quote glow. */
+:is(.calculator-mode button, .segmented button, .quantity-control button, .system, .advanced, .text-button, .text-link, .appliance-editor-footer button, .menu-toggle, .modal-close, .energy-pause, .credibility-pause, .theme-toggle, .carousel-controls button) {
+  transition: background-color .35s var(--button-ease), color .35s var(--button-ease), border-color .35s var(--button-ease);
+}
+:is(.calculator-mode button, .segmented button, .quantity-control button, .advanced, .text-button, .appliance-editor-footer button, .menu-toggle, .modal-close):is(:hover, :focus-visible):not(:disabled),
+.system:is(:hover, :focus-visible):not(.selected) {
+  background-color: var(--button-soft-fill);
+}
+:is(.text-link, .appliance-editor-footer button, .text-button) { border-radius: 4px }
+.text-link:is(:hover, :focus-visible) { background-color: var(--button-soft-fill) }
+[data-theme] :is(.energy-pause, .credibility-pause, .theme-toggle):is(:hover, :focus-visible):not(:disabled) { background-color: var(--button-fill); color: var(--button-fill-ink) }
+.carousel-controls button:is(:hover, :focus-visible) { background-color: #fff; color: #16364d }
+.button:disabled { box-shadow: none }
+.button:disabled::before { display: none }
+
+@media (prefers-reduced-motion: reduce) {
+  .button, .button::before, .button > svg,
+  :is(.calculator-mode button, .segmented button, .quantity-control button, .system, .advanced, .text-button, .text-link, .appliance-editor-footer button, .menu-toggle, .modal-close, .energy-pause, .credibility-pause, .theme-toggle, .carousel-controls button) { transition: none }
+  .button:is(:hover, :focus-visible) > svg { transform: none }
+}

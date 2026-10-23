@@ -1,0 +1,81 @@
+/* Identical groups create a continuous, gently paced right-to-left loop. */
+.hero .credibility-marquee {
+  gap: 24px;
+  padding-top: 14px;
+  padding-bottom: 14px;
+  min-height: 73px;
+}
+
+.credibility-window {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 24px, #000 calc(100% - 24px), transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 24px, #000 calc(100% - 24px), transparent);
+}
+
+.credibility-track {
+  display: flex;
+  width: max-content;
+  animation: credibility-drift 20s linear infinite;
+}
+
+.credibility-group {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: clamp(64px, 8vw, 150px);
+  padding: 0 clamp(32px, 4vw, 75px);
+}
+
+.credibility-message {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.credibility-message > svg { flex-shrink: 0 }
+.credibility-actions { display: flex; align-items: center; gap: 16px; flex-shrink: 0 }
+.hero .credibility .credibility-link { display: inline-flex; align-items: center; gap: 9px; font-size: 11px; color: var(--yellow); min-height: 44px }
+
+.credibility-pause {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  background: rgb(255 255 255 / 4%);
+  color: #d5e0ea;
+  border: 1px solid rgb(213 228 240 / 18%);
+  border-radius: 50%;
+}
+
+.credibility-pause:hover { background: rgb(255 255 255 / 10%) }
+.credibility-pause:focus-visible { outline-color: var(--yellow) }
+.credibility-track[data-paused='true'],
+.credibility-marquee:focus-within .credibility-track { animation-play-state: paused }
+
+
+@keyframes credibility-drift {
+  from { transform: translateX(0) }
+  to { transform: translateX(-50%) }
+}
+
+@media (max-width: 600px) {
+  .hero .credibility-marquee { gap: 10px; min-height: 70px; padding-top: 12px; padding-bottom: 12px }
+  .hero .credibility .credibility-link { display: none }
+  .credibility-group { gap: 64px; padding: 0 32px }
+  .credibility-message { font-size: 11px; gap: 9px }
+  .credibility-message > svg { width: 19px; height: 19px }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero .credibility-marquee { flex-wrap: wrap; justify-content: center; gap: 12px }
+  .credibility-window { flex-basis: 100%; overflow: visible; -webkit-mask-image: none; mask-image: none }
+  .credibility-track { animation: none; width: 100%; transform: none }
+  .credibility-group { flex: 1; padding: 0; gap: 16px 30px; flex-wrap: wrap; justify-content: center }
+  .credibility-group[aria-hidden='true'], .credibility-pause { display: none }
+  .credibility-message { white-space: normal }
+}

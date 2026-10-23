@@ -1,0 +1,11 @@
+/* Lenis handles wheel/anchor easing; touch keeps the device's native momentum. */
+html.lenis.lenis-smooth { scroll-behavior: auto !important }
+.scroll-effects-enabled .scroll-reveal-text {
+  opacity: var(--scroll-opacity, 1);
+  translate: var(--scroll-x, 0px) var(--scroll-y, 0px);
+}
+/* Focused content is always readable, including keyboard and find-in-page jumps. */
+.scroll-effects-enabled .scroll-reveal-text:focus-within { opacity: 1; translate: none }
+@media (prefers-reduced-motion: reduce) {
+  .scroll-effects-enabled .scroll-reveal-text { opacity: 1; translate: none }
+}

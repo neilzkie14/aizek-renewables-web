@@ -1,0 +1,56 @@
+/* Shared elevation, with shadows tuned to each page palette. */
+:root {
+  --card-hover-shadow: 0 20px 38px -16px rgb(18 48 75 / 32%), 0 5px 12px -5px rgb(18 48 75 / 12%);
+  --process-surface: #f7f9fc;
+  --process-hover: #edf3f8;
+  --process-border: #dfe7ef;
+  --process-border-active: #6486a1;
+}
+[data-theme='dark'] {
+  --card-hover-shadow: 0 24px 42px -14px rgb(0 0 0 / 75%), 0 5px 14px rgb(0 0 0 / 28%);
+  --process-surface: #102337;
+  --process-hover: #1b354e;
+  --process-border: #2a4056;
+  --process-border-active: #8caec9;
+}
+
+.process-step {
+  position: relative;
+  padding: 24px 20px;
+  border: 1px solid var(--process-border);
+  border-radius: 8px;
+  background: var(--process-surface);
+  transition: transform 260ms cubic-bezier(.2, .65, .3, 1), box-shadow 260ms ease, background-color 260ms ease;
+}
+/* Reveal one continuous rounded border, including every corner. */
+.process-step::before,
+.service-card::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border: 2px solid var(--process-border-active);
+  border-radius: inherit;
+  pointer-events: none;
+  clip-path: inset(0 100% 0 0);
+  opacity: 0;
+  transition: clip-path 450ms cubic-bezier(.22, 1, .36, 1), opacity 180ms ease;
+}
+.process-step .process-arrow,
+.process-step .process-icon { transition: transform 260ms cubic-bezier(.2, .65, .3, 1), background-color 260ms ease }
+
+@media (hover: hover) and (pointer: fine) {
+  [data-theme] .service-card:is(:hover, :focus-within),
+  .process-step:hover {
+    box-shadow: var(--card-hover-shadow);
+  }
+  .process-step:hover { transform: translateY(-6px); background-color: var(--process-hover) }
+  .process-step:hover::before,
+  .service-card:is(:hover, :focus-within)::before { clip-path: inset(0); opacity: 1 }
+  .process-step:hover .process-arrow { transform: translateX(4px) }
+  .process-step:hover .process-icon { transform: translateY(-2px) }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .process-step, .process-step::before, .service-card::before, .process-step .process-arrow, .process-step .process-icon { transition: none }
+  .process-step:hover, .process-step:hover .process-arrow, .process-step:hover .process-icon { transform: none }
+}

@@ -104,6 +104,7 @@
   width: 100%;
   height: 100%;
   mix-blend-mode: screen;
+  transform-origin: center;
   pointer-events: none;
 }
 
@@ -113,6 +114,11 @@
   object-fit: contain;
   pointer-events: none;
 }
+
+/* CSS rotation gives precise pacing and preserves its angle when paused. */
+.energy-stage img { animation: energy-orb-turn 20s linear infinite; animation-play-state: paused }
+.energy-stage[data-animated='true'] img { animation-play-state: running }
+@keyframes energy-orb-turn { to { transform: rotate(360deg) } }
 
 .energy-electricity {
   position: absolute;
@@ -170,4 +176,6 @@
 
 @media (prefers-reduced-motion: reduce) {
   .energy-electricity { transition: none }
+  .energy-stage picture { transform: none !important }
+  .energy-stage img { animation: none }
 }

@@ -33,6 +33,8 @@ function currentPath(x: number, y: number, time: number, branch = false) {
 
 export default function EnergyOrb() {
   const stageRef = useRef<HTMLButtonElement>(null)
+  const orientationRef = useRef<HTMLPictureElement>(null)
+  const orientation = useRef({ x: 0, y: 0, angle: 0 })
   const mainRef = useRef<SVGPathElement>(null)
   const glowRef = useRef<SVGPathElement>(null)
   const branchRef = useRef<SVGPathElement>(null)
@@ -60,6 +62,49 @@ export default function EnergyOrb() {
       document.removeEventListener('visibilitychange', updateVisibility)
     }
   }, [])
+
+  // A single page-wide pointer listener steers the artwork without React renders.
+  // The inner image keeps its independent, gentle 20-second rotation.
+  useEffect(() => {
+    if (!motionEnabled) return
+    const target = { ...orientation.current }
+    let frame = 0
+    let previousTime = 0
+    const followPointer = (event: globalThis.PointerEvent) => {
+      const rect = stageRef.current?.getBoundingClientRect()
+      if (!rect) return
+      const dx = event.clientX - (rect.left + rect.width / 2)
+      const dy = event.clientY - (rect.top + rect.height / 2)
+      target.x = Math.max(-12, Math.min(12, -dy / window.innerHeight * 24))
+      target.y = Math.max(-12, Math.min(12, dx / window.innerWidth * 24))
+      if (Math.hypot(dx, dy) > 12) {
+        const angle = Math.atan2(dy, dx) * 180 / Math.PI
+        // Take the shortest route when the cursor crosses the angle's seam.
+        target.angle = orientation.current.angle + ((angle - orientation.current.angle + 540) % 360 + 360) % 360 - 180
+      }
+    }
+    const reset = () => Object.assign(target, { x: 0, y: 0, angle: orientation.current.angle })
+    const animate = (time: number) => {
+      const smoothing = 1 - Math.exp(-Math.min(time - previousTime, 64) / 180)
+      previousTime = time
+      const current = orientation.current
+      current.x += (target.x - current.x) * smoothing
+      current.y += (target.y - current.y) * smoothing
+      current.angle += (target.angle - current.angle) * smoothing
+      if (orientationRef.current) {
+        orientationRef.current.style.transform = `perspective(800px) rotateX(${current.x}deg) rotateY(${current.y}deg) rotateZ(${current.angle}deg)`
+      }
+      frame = requestAnimationFrame(animate)
+    }
+    window.addEventListener('pointermove', followPointer, { passive: true })
+    document.documentElement.addEventListener('pointerleave', reset)
+    frame = requestAnimationFrame(animate)
+    return () => {
+      cancelAnimationFrame(frame)
+      window.removeEventListener('pointermove', followPointer)
+      document.documentElement.removeEventListener('pointerleave', reset)
+    }
+  }, [motionEnabled])
 
   useEffect(() => {
     let frame = 0
@@ -129,9 +174,8 @@ export default function EnergyOrb() {
         onPointerLeave={() => setActive(false)} onPointerCancel={() => setActive(false)}
         onBlur={() => setActive(false)} onKeyDown={keyboard}
         onClick={event => { if (event.detail === 0) { setActive(true); drawRef.current(0) } }}>
-        <picture>
-          {motionEnabled && <source type="image/webp" srcSet="/images/energy-orb-rotating.webp" />}
-          <img src={motionEnabled ? '/images/energy-orb-rotating.gif' : '/images/energy-orb-still.jpg'}
+        <picture ref={orientationRef}>
+          <img src="/images/energy-orb-still.jpg"
             alt="" width="360" height="360" draggable={false} decoding="async" />
         </picture>
         <svg className="energy-electricity" viewBox="0 0 400 400" aria-hidden="true" focusable="false">
@@ -143,6 +187,6 @@ export default function EnergyOrb() {
         </svg>
       </button>
     </div>
-    <div className="energy-panel-footer"><div><strong>Energy, in motion.</strong><p id="energy-orb-help">Move your pointer or touch the orb.<span className="sr-only"> Press Enter to activate. Use arrow keys to move the current, and Escape to clear it.</span></p></div><MoveUpRight size={19} aria-hidden="true" /></div>
+    <div className="energy-panel-footer"><div><strong>Energy, in motion.</strong><p id="energy-orb-help">Move your pointer anywhere. Touch the orb for a spark.<span className="sr-only"> Press Enter to activate. Use arrow keys to move the current, and Escape to clear it.</span></p></div><MoveUpRight size={19} aria-hidden="true" /></div>
   </div>
 }
