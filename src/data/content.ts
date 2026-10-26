@@ -1,6 +1,7 @@
 import type { Project, Testimonial } from '../services/publicApi'
 export const projects: Project[] = [
-  { id: 'preview-1', title: 'A brighter outlook, from the rooftop.', image: 'https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&w=1600&q=85', alt: 'Illustrative solar panels arranged beneath a blue sky', approved: false },
-  { id: 'preview-2', title: 'Make room for a different kind of energy.', image: 'https://images.unsplash.com/photo-1497440001374-f26997328c1b?auto=format&fit=crop&w=1600&q=85', alt: 'Illustrative photovoltaic installation in daylight', approved: false },
+  { id: 'install-1', title: 'Successful installation 6.2kWp Solar Panels!', image: '/images/install-6kwp.jpg', alt: 'AIZEK technicians installing a 6.2kWp solar array on a rooftop', approved: true, capacityKwp: 6.2 },
+  { id: 'install-2', title: '3.1kWp additional PV array and 5.1kWh battery installation', image: '/images/install-lubao-3kwp.jpg', alt: 'AIZEK technicians mounting solar rails on a roof in Lubao, Pampanga', approved: true, location: 'San Pablo, Lubao, Pampanga', capacityKwp: 3.1 },
+  { id: 'install-3', title: 'Project completion! 2.5kWp-5kW-5.1kWh Solar System Package', image: '/images/install-magalang-2kwp.jpg', alt: 'Completed 2.5kWp rooftop solar array in Magalang, Pampanga', approved: true, location: 'Magalang, Pampanga', capacityKwp: 2.5 },
 ]
 export const testimonials: Testimonial[] = []
