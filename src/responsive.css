@@ -595,3 +595,14 @@ textarea {
     margin-bottom: 0;
   }
 }
+/* Carousel caption: smaller, sits at the bottom, clears the arrows */
+.project-overlay{background:linear-gradient(0deg,#07192dcc,transparent 40%)}
+.project-info{bottom:20px;left:24px;max-width:calc(100% - 150px)}
+.project-info h3{font-size:20px;letter-spacing:-.4px;margin:4px 0}
+.project-info p{font-size:11px}
+.project-type{font-size:8px}
+@media (max-width:600px){
+  .project-info{bottom:14px;left:16px;max-width:calc(100% - 110px)}
+  .project-info h3{font-size:16px;max-width:none}
+  .project-info p{font-size:10px}
+}
