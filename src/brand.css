@@ -73,3 +73,7 @@ h3{font-weight:700;font-stretch:105%}
 /* ---------- FAQ ---------- */
 .faq-list summary{font:700 18px/1.35 var(--f-body)}
 .faq-list details p{font-size:16px;color:var(--ink-2)}
+
+/* ---------- Logo image ---------- */
+.brand-logo{display:block;height:48px;width:auto;background:var(--band);border-radius:6px;padding:6px 10px}
+@media (max-width:600px){.brand-logo{height:40px}}
