@@ -1,8 +1,20 @@
 import { describe, expect, it } from 'vitest'
-import { calculateAppliances, sampleAppliances } from './appliances'
+import { calculateAppliances, sampleAppliances, type Appliance } from './appliances'
 
-// Reference sample from the original estimator: cooking appliances switched off.
-const referenceAppliances = sampleAppliances.map(row => ['microwave', 'oven', 'induction', 'kettle'].includes(row.id) ? { ...row, quantity: 0 } : row)
+// Fixed reference sample from the original estimator. Kept separate from the
+// on-screen sample list so editing that list never breaks these math checks.
+const referenceAppliances: Appliance[] = [
+  { id: 'aircon-inverter', name: 'Aircon 1.5 HP (inverter)', watts: 1000, hours: 8, quantity: 1 },
+  { id: 'fridge', name: 'Refrigerator', watts: 150, hours: 12, quantity: 1 },
+  { id: 'fan', name: 'Electric fan', watts: 60, hours: 8, quantity: 2 },
+  { id: 'lights', name: 'LED lights', watts: 10, hours: 6, quantity: 8 },
+  { id: 'tv', name: 'TV (LED)', watts: 100, hours: 5, quantity: 1 },
+  { id: 'computer', name: 'Laptop or desktop', watts: 120, hours: 8, quantity: 1 },
+  { id: 'router', name: 'Wi-Fi router', watts: 15, hours: 24, quantity: 1 },
+  { id: 'rice', name: 'Rice cooker', watts: 700, hours: 1, quantity: 1 },
+  { id: 'washer', name: 'Washing machine', watts: 500, hours: 1, quantity: 1 },
+  { id: 'pump', name: 'Water pump 1 HP', watts: 750, hours: 0.5, quantity: 0 },
+]
 
 describe('appliance-based planning estimate', () => {
   it('reproduces the reference sample using explicit assumptions', () => {
