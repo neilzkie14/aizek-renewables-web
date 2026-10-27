@@ -26,19 +26,21 @@ export const usagePatterns: { id: UsagePattern; title: string; description: stri
 
 export const sampleAppliances: Appliance[] = [
   { id: 'aircon-inverter', name: 'Aircon 1.5 HP (inverter)', watts: 1000, hours: 8, quantity: 1 },
+  { id: 'microwave', name: 'Microwave oven', watts: 1200, hours: 0.3, quantity: 0 },
+  { id: 'oven', name: 'Electric oven', watts: 1500, hours: 0.5, quantity: 0 },
+  { id: 'induction', name: 'Induction cooker', watts: 2000, hours: 1, quantity: 0 },
+  { id: 'heater', name: 'Water heater', watts: 3500, hours: 0.3, quantity: 0 },
+  { id: 'kettle', name: 'Electric kettle', watts: 1500, hours: 0.2, quantity: 0 },
+  { id: 'washer', name: 'Washing machine', watts: 500, hours: 1, quantity: 1 },
+  { id: 'rice', name: 'Rice cooker', watts: 700, hours: 1, quantity: 1 },
   { id: 'fridge', name: 'Refrigerator', watts: 150, hours: 12, quantity: 1 },
   { id: 'fan', name: 'Electric fan', watts: 60, hours: 8, quantity: 2 },
+  { id: 'computer', name: 'Computer', watts: 120, hours: 8, quantity: 1 },
   { id: 'lights', name: 'LED lights', watts: 10, hours: 6, quantity: 8 },
   { id: 'tv', name: 'TV (LED)', watts: 100, hours: 5, quantity: 1 },
-  { id: 'computer', name: 'Laptop or desktop', watts: 120, hours: 8, quantity: 1 },
   { id: 'router', name: 'Wi-Fi router', watts: 15, hours: 24, quantity: 1 },
-  { id: 'rice', name: 'Rice cooker', watts: 700, hours: 1, quantity: 1 },
-  { id: 'washer', name: 'Washing machine', watts: 500, hours: 1, quantity: 1 },
   { id: 'pump', name: 'Water pump 1 HP', watts: 750, hours: 0.5, quantity: 0 },
   { id: 'aircon', name: 'Aircon 1 HP', watts: 750, hours: 8, quantity: 0 },
-  { id: 'heater', name: 'Electric water heater', watts: 3500, hours: 0.3, quantity: 0 },
-  { id: 'microwave', name: 'Microwave', watts: 1200, hours: 0.3, quantity: 0 },
-  { id: 'induction', name: 'Induction cooker', watts: 2000, hours: 1, quantity: 0 },
 ]
 
 export function calculateAppliances(raw: Appliance[], pattern: UsagePattern) {
