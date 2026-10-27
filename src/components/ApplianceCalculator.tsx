@@ -84,7 +84,7 @@ export default function ApplianceCalculator({ onQuote }: { onQuote: (estimate: A
           return <Fragment key={row.id}><tr className={[row.quantity === 0 ? 'appliance-inactive' : '', row.aircon ? 'aircon-row' : ''].join(' ').trim()}>
             <th scope="row">{row.aircon ? <span className="aircon-head">
               <span>{row.name}</span>
-              <label className="inverter-toggle"><input type="checkbox" checked={!!row.inverter} onChange={event => setInverter(row.id, event.target.checked)} /> Inverter</label>
+              <label className="inverter-toggle">Inverter <input type="checkbox" checked={!!row.inverter} onChange={event => setInverter(row.id, event.target.checked)} /></label>
               {row.removable && <button type="button" className="aircon-remove" aria-label="Remove this aircon" onClick={() => removeRow(row.id)}><X size={15} /></button>}
             </span> : row.name}</th>
             <td data-label="Watts"><div className="appliance-number"><input
@@ -105,7 +105,7 @@ export default function ApplianceCalculator({ onQuote }: { onQuote: (estimate: A
               <button type="button" aria-label={`Increase ${row.name} quantity`} disabled={row.quantity === 100} onClick={() => quantity(row.id, 1)}><Plus size={13} /></button>
             </div></td>
           </tr>
-          {index === lastAirconIndex && <tr className="aircon-add-row"><td colSpan={4}><button type="button" className="aircon-add" onClick={addAircon}><Plus size={14} /> Add another aircon</button></td></tr>}
+          {index === lastAirconIndex && <tr className="aircon-add-row"><td colSpan={4}><button type="button" className="aircon-add" onClick={addAircon}><Plus size={14} /> Add aircon</button></td></tr>}
           </Fragment>
         })}</tbody>
       </table>
