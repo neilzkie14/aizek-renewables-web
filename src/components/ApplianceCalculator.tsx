@@ -12,18 +12,23 @@ import {
 
 type DraftRow = { id: string; name: string; watts: string; hours: string; quantity: number }
 const initialRows = (): DraftRow[] => sampleAppliances.map(row => ({ ...row, watts: String(row.watts), hours: String(row.hours) }))
+const INITIAL_ROWS = 10
+const ROWS_PER_CLICK = 3
 const number = (value: number, digits = 0) => new Intl.NumberFormat('en-PH', { maximumFractionDigits: digits, minimumFractionDigits: digits }).format(value)
 
 export default function ApplianceCalculator({ onQuote }: { onQuote: (estimate: ApplianceEstimate) => void }) {
   const [rows, setRows] = useState(initialRows)
   const [pattern, setPattern] = useState<UsagePattern>('balanced')
+  const [visibleCount, setVisibleCount] = useState(INITIAL_ROWS)
+  const shownRows = rows.slice(0, visibleCount)
+  const hiddenCount = rows.length - shownRows.length
   const update = (id: string, field: 'watts' | 'hours', value: string) => {
     setRows(current => current.map(row => row.id === id ? { ...row, [field]: value } : row))
   }
   const quantity = (id: string, delta: number) => {
     setRows(current => current.map(row => row.id === id ? { ...row, quantity: Math.max(0, Math.min(100, row.quantity + delta)) } : row))
   }
-  const parsed = rows.map(row => ({
+  const parsed = shownRows.map(row => ({
     ...row,
     watts: row.quantity === 0 ? Number(row.watts) || 1 : Number(row.watts),
     hours: row.quantity === 0 ? Number(row.hours) || 0 : row.hours.trim() === '' ? NaN : Number(row.hours),
@@ -48,7 +53,7 @@ export default function ApplianceCalculator({ onQuote }: { onQuote: (estimate: A
       <table className="appliance-table">
         <caption className="sr-only">Appliances, rated power, daily hours, and quantity. Changes update your estimate automatically.</caption>
         <thead><tr><th scope="col">Appliance</th><th scope="col">Watts</th><th scope="col">Hours / day</th><th scope="col">Qty</th></tr></thead>
-        <tbody>{rows.map((row, index) => {
+        <tbody>{shownRows.map((row, index) => {
           const invalid = invalidRows.includes(index)
           return <tr key={row.id} className={row.quantity === 0 ? 'appliance-inactive' : ''}>
             <th scope="row">{row.name}</th>
@@ -72,6 +77,7 @@ export default function ApplianceCalculator({ onQuote }: { onQuote: (estimate: A
           </tr>
         })}</tbody>
       </table>
+      {hiddenCount > 0 && <button type="button" className="appliance-add-more" onClick={() => setVisibleCount(count => Math.min(rows.length, count + ROWS_PER_CLICK))}><Plus size={15} /> Add more appliances <span>({hiddenCount} more)</span></button>}
       {invalidRows.length > 0 && <p className="appliance-error" role="alert">Check {invalidRows.map(index => rows[index].name).join(', ')}: watts must be 1–50,000 and daily hours 0–24. Complete any empty fields.</p>}
       <fieldset className="usage-patterns">
         <legend>When do you use most of your power?</legend>
@@ -80,7 +86,7 @@ export default function ApplianceCalculator({ onQuote }: { onQuote: (estimate: A
           <span><strong>{option.title}</strong><small>{option.description}</small></span>
         </label>)}</div>
       </fieldset>
-      <div className="appliance-editor-footer"><p>Use your appliance labels for more accurate wattages. Sample duty hours and power ratings vary by model.</p><button type="button" onClick={() => { setRows(initialRows()); setPattern('balanced') }}><RotateCcw size={14} /> Reset sample</button></div>
+      <div className="appliance-editor-footer"><p>Use your appliance labels for more accurate wattages. Sample duty hours and power ratings vary by model.</p><button type="button" onClick={() => { setRows(initialRows()); setPattern('balanced'); setVisibleCount(INITIAL_ROWS) }}><RotateCcw size={14} /> Reset sample</button></div>
     </div>
 
     <aside id="appliance-estimate" className="appliance-result" aria-label="Appliance system estimate">
