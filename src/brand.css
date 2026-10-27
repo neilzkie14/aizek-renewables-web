@@ -139,3 +139,17 @@ h3{font-weight:700;font-stretch:105%}
   .appliance-table tbody tr.aircon-add-row{display:block;padding:0 14px 10px}
   .appliance-table tbody tr.aircon-add-row td{display:block;padding:0}
 }
+
+/* ---------- Phones: swipe left to remove an added aircon (no × button) ---------- */
+.swipe-hint{display:none}
+@media (max-width:600px){
+  .appliance-table tbody tr.swipe-row{touch-action:pan-y;transition:transform .2s ease}
+  .swipe-row .aircon-remove{display:none}
+  .swipe-hint{display:inline;margin-left:12px;font-size:12px;color:var(--ink-2)}
+}
+
+/* ---------- Swipe hint: right side, lined up with "Add aircon" ---------- */
+@media (max-width:600px){
+  .appliance-table tbody tr.aircon-add-row td{display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .swipe-hint{margin-left:auto;text-align:right;line-height:1.2}
+}
