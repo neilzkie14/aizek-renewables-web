@@ -31,7 +31,7 @@ const number = (value: number, digits = 0) => new Intl.NumberFormat('en-PH', { m
 
 export default function ApplianceCalculator({ onQuote }: { onQuote: (estimate: ApplianceEstimate) => void }) {
   const [rows, setRows] = useState(initialRows)
-  const [pattern, setPattern] = useState<UsagePattern>('balanced')
+  const [pattern, setPattern] = useState<UsagePattern>('daytime')
   const [visibleCount, setVisibleCount] = useState(INITIAL_ROWS)
   const shownRows = rows.slice(0, visibleCount)
   const hiddenCount = rows.length - shownRows.length
@@ -160,7 +160,7 @@ export default function ApplianceCalculator({ onQuote }: { onQuote: (estimate: A
       </table>
       <div className="appliance-list-actions">
         {hiddenCount > 0 && <button type="button" className="appliance-add-more" onClick={() => setVisibleCount(count => Math.min(rows.length, count + ROWS_PER_CLICK))}><Plus size={15} /> Add more appliances <span>({hiddenCount} more)</span></button>}
-        <button type="button" className="appliance-reset" onClick={() => { setRows(initialRows()); setPattern('balanced'); setVisibleCount(INITIAL_ROWS) }}><RotateCcw size={14} /> Reset sample</button>
+        <button type="button" className="appliance-reset" onClick={() => { setRows(initialRows()); setPattern('daytime'); setVisibleCount(INITIAL_ROWS) }}><RotateCcw size={14} /> Reset sample</button>
       </div>
       {invalidRows.length > 0 && <p className="appliance-error" role="alert">Check {invalidRows.map(index => rowName(shownRows[index])).join(', ')}: watts must be 1–50,000 and daily hours 0–24. Complete any empty fields.</p>}
       <fieldset className="usage-patterns">
