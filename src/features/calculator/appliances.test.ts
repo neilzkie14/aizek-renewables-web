@@ -1,9 +1,12 @@
 import { describe, expect, it } from 'vitest'
 import { calculateAppliances, sampleAppliances } from './appliances'
 
+// Reference sample from the original estimator: cooking appliances switched off.
+const referenceAppliances = sampleAppliances.map(row => ['microwave', 'oven', 'induction', 'kettle'].includes(row.id) ? { ...row, quantity: 0 } : row)
+
 describe('appliance-based planning estimate', () => {
   it('reproduces the reference sample using explicit assumptions', () => {
-    const r = calculateAppliances(sampleAppliances, 'balanced')
+    const r = calculateAppliances(referenceAppliances, 'balanced')
     expect(r.dailyEnergy).toBeCloseTo(14.26)
     expect(r.connectedLoad).toBe(2785)
     expect(r.panelCount).toBe(8)
@@ -14,7 +17,7 @@ describe('appliance-based planning estimate', () => {
     expect(r.monthlyGeneration).toBeCloseTo(476.16)
   })
   it('recalculates when an appliance quantity changes', () => {
-    const rows = sampleAppliances.map(row => row.id === 'aircon-inverter' ? { ...row, quantity: 3 } : row)
+    const rows = referenceAppliances.map(row => row.id === 'aircon-inverter' ? { ...row, quantity: 3 } : row)
     const r = calculateAppliances(rows, 'balanced')
     expect(r.dailyEnergy).toBeCloseTo(30.26)
     expect(r.connectedLoad).toBe(4785)

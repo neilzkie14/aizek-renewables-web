@@ -26,11 +26,11 @@ export const usagePatterns: { id: UsagePattern; title: string; description: stri
 
 export const sampleAppliances: Appliance[] = [
   { id: 'aircon-inverter', name: 'Aircon 1.5 HP (inverter)', watts: 1000, hours: 8, quantity: 1 },
-  { id: 'microwave', name: 'Microwave oven', watts: 1200, hours: 0.3, quantity: 0 },
-  { id: 'oven', name: 'Electric oven', watts: 1500, hours: 0.5, quantity: 0 },
-  { id: 'induction', name: 'Induction cooker', watts: 2000, hours: 1, quantity: 0 },
+  { id: 'microwave', name: 'Microwave oven', watts: 1200, hours: 0.3, quantity: 1 },
+  { id: 'oven', name: 'Electric oven', watts: 1500, hours: 0.5, quantity: 1 },
+  { id: 'induction', name: 'Induction cooker', watts: 2000, hours: 1, quantity: 1 },
   { id: 'heater', name: 'Water heater', watts: 3500, hours: 0.3, quantity: 0 },
-  { id: 'kettle', name: 'Electric kettle', watts: 1500, hours: 0.2, quantity: 0 },
+  { id: 'kettle', name: 'Electric kettle', watts: 1500, hours: 0.2, quantity: 1 },
   { id: 'washer', name: 'Washing machine', watts: 500, hours: 1, quantity: 1 },
   { id: 'rice', name: 'Rice cooker', watts: 700, hours: 1, quantity: 1 },
   { id: 'fridge', name: 'Refrigerator', watts: 150, hours: 12, quantity: 1 },
