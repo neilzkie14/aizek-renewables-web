@@ -125,3 +125,17 @@ h3{font-weight:700;font-stretch:105%}
 .appliance-reset{display:inline-flex;align-items:center;gap:7px;min-height:46px;padding:0 6px;margin-left:auto;background:transparent;border:0;color:var(--ink-2);font:600 14px/1 var(--f-body);white-space:nowrap;cursor:pointer}
 .appliance-reset:hover{color:var(--ink)}
 @media (max-width:600px){.appliance-list-actions{margin:12px 14px 4px;gap:8px}.appliance-list-actions .appliance-add-more span{display:none}}
+
+/* ---------- Aircon rows: inverter tick box + add another ---------- */
+.aircon-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.inverter-toggle{display:inline-flex;align-items:center;gap:6px;margin-left:auto;font:600 13px/1 var(--f-body);color:var(--ink-2);cursor:pointer;white-space:nowrap}
+.inverter-toggle input{width:18px;height:18px;margin:0;accent-color:var(--sun);cursor:pointer}
+.aircon-remove{display:inline-grid;place-items:center;width:28px;height:28px;border:0;border-radius:4px;background:transparent;color:var(--ink-2);cursor:pointer}
+.aircon-remove:hover{color:var(--ink);background:var(--sun-soft)}
+.appliance-table tbody tr.aircon-add-row td{padding:0 18px 10px;border-top:0}
+.aircon-add{display:inline-flex;align-items:center;gap:6px;min-height:32px;padding:0;border:0;background:transparent;color:var(--sun);font:700 14px/1 var(--f-body);cursor:pointer}
+.aircon-add:hover{text-decoration:underline}
+@media (max-width:600px){
+  .appliance-table tbody tr.aircon-add-row{display:block;padding:0 14px 10px}
+  .appliance-table tbody tr.aircon-add-row td{display:block;padding:0}
+}
