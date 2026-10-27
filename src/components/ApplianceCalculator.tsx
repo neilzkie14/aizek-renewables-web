@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react'
+import { Fragment, useRef, useState, type TouchEvent } from 'react'
 import { ArrowUpRight, Info, Minus, Plus, RotateCcw, X } from 'lucide-react'
 import {
   applianceAssumptions,
@@ -52,6 +52,35 @@ export default function ApplianceCalculator({ onQuote }: { onQuote: (estimate: A
     setRows(current => current.filter(row => row.id !== id))
     setVisibleCount(count => count - 1)
   }
+  // Phones: swipe an added aircon row right-to-left to remove it.
+  const SWIPE_REMOVE_AT = 110
+  const swipeStart = useRef<{ id: string; x: number; y: number; horizontal: boolean | null } | null>(null)
+  const [swipe, setSwipe] = useState<{ id: string; dx: number } | null>(null)
+  const onSwipeStart = (id: string) => (event: TouchEvent) => {
+    if ((event.target as HTMLElement).closest('input[type="number"], button')) return
+    const t = event.touches[0]
+    swipeStart.current = { id, x: t.clientX, y: t.clientY, horizontal: null }
+  }
+  const onSwipeMove = (event: TouchEvent) => {
+    const start = swipeStart.current
+    if (!start) return
+    const t = event.touches[0]
+    const dx = t.clientX - start.x
+    const dy = t.clientY - start.y
+    if (start.horizontal === null && (Math.abs(dx) > 8 || Math.abs(dy) > 8)) start.horizontal = Math.abs(dx) > Math.abs(dy)
+    if (start.horizontal) setSwipe({ id: start.id, dx: Math.min(0, dx) })
+  }
+  const onSwipeEnd = () => {
+    const start = swipeStart.current
+    swipeStart.current = null
+    if (start && swipe && swipe.id === start.id && swipe.dx <= -SWIPE_REMOVE_AT) removeRow(start.id)
+    setSwipe(null)
+  }
+  const swipeStyle = (id: string) => {
+    if (!swipe || swipe.id !== id) return undefined
+    const pull = Math.min(1, -swipe.dx / SWIPE_REMOVE_AT)
+    return { transform: `translateX(${swipe.dx}px)`, transition: 'none', boxShadow: `inset -${Math.round(-swipe.dx)}px 0 0 rgb(194 65 12 / ${0.35 + pull * 0.5})` }
+  }
   const lastAirconIndex = shownRows.map(row => !!row.aircon).lastIndexOf(true)
   const parsed = shownRows.map(row => ({
     ...row,
@@ -81,7 +110,12 @@ export default function ApplianceCalculator({ onQuote }: { onQuote: (estimate: A
         <thead><tr><th scope="col">Appliance</th><th scope="col">Watts</th><th scope="col">Hours / day</th><th scope="col">Qty</th></tr></thead>
         <tbody>{shownRows.map((row, index) => {
           const invalid = invalidRows.includes(index)
-          return <Fragment key={row.id}><tr className={[row.quantity === 0 ? 'appliance-inactive' : '', row.aircon ? 'aircon-row' : ''].join(' ').trim()}>
+          return <Fragment key={row.id}><tr className={[row.quantity === 0 ? 'appliance-inactive' : '', row.aircon ? 'aircon-row' : '', row.removable ? 'swipe-row' : ''].join(' ').trim()}
+            style={row.removable ? swipeStyle(row.id) : undefined}
+            onTouchStart={row.removable ? onSwipeStart(row.id) : undefined}
+            onTouchMove={row.removable ? onSwipeMove : undefined}
+            onTouchEnd={row.removable ? onSwipeEnd : undefined}
+            onTouchCancel={row.removable ? onSwipeEnd : undefined}>
             <th scope="row">{row.aircon ? <span className="aircon-head">
               <span>{row.name}</span>
               <label className="inverter-toggle">Inverter <input type="checkbox" checked={!!row.inverter} onChange={event => setInverter(row.id, event.target.checked)} /></label>
@@ -105,7 +139,7 @@ export default function ApplianceCalculator({ onQuote }: { onQuote: (estimate: A
               <button type="button" aria-label={`Increase ${row.name} quantity`} disabled={row.quantity === 100} onClick={() => quantity(row.id, 1)}><Plus size={13} /></button>
             </div></td>
           </tr>
-          {index === lastAirconIndex && <tr className="aircon-add-row"><td colSpan={4}><button type="button" className="aircon-add" onClick={addAircon}><Plus size={14} /> Add aircon</button></td></tr>}
+          {index === lastAirconIndex && <tr className="aircon-add-row"><td colSpan={4}><button type="button" className="aircon-add" onClick={addAircon}><Plus size={14} /> Add aircon</button>{rows.some(row => row.removable) && <span className="swipe-hint">Swipe a row left to remove it</span>}</td></tr>}
           </Fragment>
         })}</tbody>
       </table>
