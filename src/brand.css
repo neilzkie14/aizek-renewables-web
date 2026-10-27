@@ -1,0 +1,75 @@
+/* AIZEK brand layer: colors, fonts and type sizes from the approved design.
+   Loaded last, so it overrides the older styles. Delete the import in main.tsx to undo. */
+
+/* ---------- Colors (light) ---------- */
+:root{
+  --paper:#F2F5F7; --sheet:#FFFFFF; --ink:#0B2E45; --ink-2:#456173;
+  --band:#0B2E45; --band-2:#123B57; --band-fg:#EAF1F5; --band-mute:#A8BECB;
+  --sun:#F6B421; --sun-ink:#2B1F00; --sun-soft:#FDF0CC;
+  --f-display:"Archivo","Arial Narrow",Arial,sans-serif;
+  --f-body:"Source Sans 3","Segoe UI",system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+  /* old names used across the site, mapped to the new palette */
+  --navy:var(--band); --yellow:var(--sun); --muted:var(--ink-2); --line:#D3DDE3;
+  font-family:var(--f-body); color:var(--ink);
+}
+/* ---------- Colors (dark mode toggle) ---------- */
+:root[data-theme='dark']{
+  --paper:#08161F; --sheet:#0E2331; --ink:#E5EDF2; --ink-2:#9AB0BE;
+  --band:#0B2433; --band-2:#123349; --band-fg:#E5EDF2; --band-mute:#8FA8B7;
+  --sun-soft:#3A2E0E;
+  --night-bg:#08161F; --night-surface:#0E2331; --night-raised:#123349;
+  --night-text:#E5EDF2; --night-muted:#9AB0BE; --night-border:#1F3B4D;
+  --line:#1F3B4D;
+}
+
+/* ---------- Base type ---------- */
+body{font:400 17px/1.6 var(--f-body);background:var(--paper);color:var(--ink);-webkit-font-smoothing:antialiased}
+p{line-height:1.6}
+h1,h2,h3{font-family:var(--f-display);font-stretch:112%;letter-spacing:-.01em;text-wrap:balance}
+h1{max-width:660px;font-size:clamp(38px,4.6vw,64px);font-weight:850;font-stretch:118%;letter-spacing:-.02em;line-height:1.05}
+h1 em{color:var(--sun)}
+h2{font-size:clamp(30px,4.2vw,46px);font-weight:800;line-height:1.05;letter-spacing:-.01em}
+h3{font-weight:700;font-stretch:105%}
+
+/* Small labels: mono, uppercase, yellow dash */
+.eyebrow,.hero-eyebrow{font:500 12.5px/1 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2);display:flex;align-items:center;gap:10px}
+.eyebrow::before{content:"";width:22px;height:3px;background:var(--sun);border-radius:2px;flex:none}
+.hero-eyebrow{color:var(--band-mute)}
+
+/* ---------- Header ---------- */
+.header{background:var(--band);border-bottom:1px solid var(--band-2)}
+.brand>span:last-child{font-family:var(--f-display);font-stretch:118%}
+.brand small{font-family:var(--f-mono)}
+.nav-links{font-size:15.5px;font-weight:600;color:var(--band-mute)}
+.nav-links>a:hover{color:var(--band-fg)}
+
+/* ---------- Buttons ---------- */
+.button{font:700 16px/1 var(--f-body);border-radius:6px}
+.nav-quote{font-size:15px}
+.primary{background:var(--sun);color:var(--sun-ink)}
+.primary:hover{background:#FFC63F}
+.outline{font-size:16px;border:2px solid currentColor}
+
+/* ---------- Hero ---------- */
+.hero{background:var(--band)}
+.hero-copy>p{font-size:19px;color:var(--band-mute);max-width:60ch}
+.hero-note{font:500 13px/1.4 var(--f-mono);color:var(--band-mute);letter-spacing:.04em}
+
+/* ---------- Sections and cards ---------- */
+.section-heading>p,.faq-intro p{font-size:19px;color:var(--ink-2);max-width:60ch}
+.service-card{background:var(--sheet);border:1px solid var(--line);border-radius:6px}
+.service-card h3{font-size:21px}
+.service-card p{font-size:16px;color:var(--ink-2)}
+.projects-section{background:var(--paper)}
+.project-carousel{background:var(--band);border-radius:6px}
+.project-info h3{font-family:var(--f-display)}
+.carousel-dots>span{font-family:var(--f-mono);font-size:13px}
+.results-card h3{font-size:clamp(26px,3vw,34px)}
+.results-card>p{font-size:15px;color:var(--ink-2)}
+.results-card>.eyebrow{font-size:12px}
+.step-tag{font:500 13px/1 var(--f-mono)}
+
+/* ---------- FAQ ---------- */
+.faq-list summary{font:700 18px/1.35 var(--f-body)}
+.faq-list details p{font-size:16px;color:var(--ink-2)}
