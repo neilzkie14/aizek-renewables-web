@@ -10,17 +10,19 @@ import {
   type UsagePattern,
 } from '../features/calculator/appliances'
 
-type DraftRow = { id: string; name: string; watts: string; hours: string; quantity: number; aircon?: boolean; inverter?: boolean; removable?: boolean }
+type DraftRow = { id: string; name: string; watts: string; hours: string; quantity: number; aircon?: boolean; inverter?: boolean; removable?: boolean; editableName?: boolean }
 // Aircon rows: a tick box switches between inverter and non-inverter, using typical running watts for a 1.5 HP unit.
 const AIRCON_NAME = 'Aircon 1.5 HP'
 // Inverter watts come from the first row of the sample list; change standard watts here.
 const AIRCON_WATTS = { inverter: String(sampleAppliances.find(row => row.id === 'aircon-inverter')?.watts ?? 1000), standard: '1500' }
 const isAirconSample = (id: string) => id === 'aircon-inverter'
-const initialRows = (): DraftRow[] => sampleAppliances.map(row => ({
+const initialRows = (): DraftRow[] => sampleAppliances.map((row, index) => ({
   ...row, watts: String(row.watts), hours: String(row.hours),
+  // Rows revealed by "Add more appliances" get an editable name.
+  editableName: index >= INITIAL_ROWS,
   ...(isAirconSample(row.id) ? { aircon: true, inverter: true, name: AIRCON_NAME } : {}),
 }))
-const rowName = (row: DraftRow) => row.aircon ? `${row.name}${row.inverter ? ' (inverter)' : ''}` : row.name
+const rowName = (row: DraftRow) => row.aircon ? `${row.name}${row.inverter ? ' (inverter)' : ''}` : row.name.trim() || 'Unnamed appliance'
 const INITIAL_ROWS = 10
 const ROWS_PER_CLICK = 3
 const number = (value: number, digits = 0) => new Intl.NumberFormat('en-PH', { maximumFractionDigits: digits, minimumFractionDigits: digits }).format(value)
@@ -31,6 +33,9 @@ export default function ApplianceCalculator({ onQuote }: { onQuote: (estimate: A
   const [visibleCount, setVisibleCount] = useState(INITIAL_ROWS)
   const shownRows = rows.slice(0, visibleCount)
   const hiddenCount = rows.length - shownRows.length
+  const rename = (id: string, name: string) => {
+    setRows(current => current.map(row => row.id === id ? { ...row, name } : row))
+  }
   const update = (id: string, field: 'watts' | 'hours', value: string) => {
     setRows(current => current.map(row => row.id === id ? { ...row, [field]: value } : row))
   }
@@ -120,7 +125,11 @@ export default function ApplianceCalculator({ onQuote }: { onQuote: (estimate: A
               <span>{row.name}</span>
               <label className="inverter-toggle">Inverter <input type="checkbox" checked={!!row.inverter} onChange={event => setInverter(row.id, event.target.checked)} /></label>
               {row.removable && <button type="button" className="aircon-remove" aria-label="Remove this aircon" onClick={() => removeRow(row.id)}><X size={15} /></button>}
-            </span> : row.name}</th>
+            </span> : row.editableName ? <input
+              className="appliance-name-input" type="text" maxLength={40} value={row.name}
+              aria-label="Appliance name" placeholder="Appliance name"
+              onChange={event => rename(row.id, event.target.value)}
+            /> : row.name}</th>
             <td data-label="Watts"><div className="appliance-number"><input
               type="number" inputMode="decimal" min="1" max="50000" step="any"
               aria-label={`${row.name} watts`} aria-invalid={invalid || undefined}
