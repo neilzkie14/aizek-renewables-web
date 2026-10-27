@@ -14,5 +14,6 @@ import './theme.css'
 import './button-effects.css'
 import './card-effects.css'
 import './scroll-effects.css'
+import './brand.css'
 const queryClient = new QueryClient()
 ReactDOM.createRoot(document.getElementById('root')!).render(<React.StrictMode><QueryClientProvider client={queryClient}><BrowserRouter><App /></BrowserRouter></QueryClientProvider></React.StrictMode>)
