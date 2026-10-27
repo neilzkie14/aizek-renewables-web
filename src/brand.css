@@ -81,3 +81,9 @@ h3{font-weight:700;font-stretch:105%}
 
 /* ---------- Hide energy orb on phones ---------- */
 @media (max-width:600px){.hero .hero-visual.energy-visual{display:none}}
+
+/* ---------- Hero label: line instead of dot ---------- */
+.hero .hero-eyebrow>span{width:22px;height:3px;border-radius:2px;background:var(--sun);flex:none}
+
+/* ---------- No double line on labels that already have one ---------- */
+.eyebrow:has(>span)::before{display:none}
