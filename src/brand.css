@@ -118,6 +118,7 @@ h3{font-weight:700;font-stretch:105%}
 .appliance-add-more:hover{border-color:var(--sun);background:var(--sun-soft)}
 @media (max-width:600px){.appliance-add-more{width:calc(100% - 28px);margin:12px 14px 4px}}
 
+
 /* ---------- Add more + Reset row under the appliance list ---------- */
 .appliance-list-actions{display:flex;align-items:center;gap:12px;margin:14px 18px 4px}
 .appliance-list-actions .appliance-add-more{flex:1;width:auto;margin:0;white-space:nowrap}
