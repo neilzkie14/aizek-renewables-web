@@ -39,7 +39,6 @@ export const sampleAppliances: Appliance[] = [
   { id: 'tv', name: 'TV (LED)', watts: 100, hours: 5, quantity: 1 },
   { id: 'router', name: 'Wi-Fi router', watts: 5, hours: 24, quantity: 1 },
   { id: 'pump', name: 'Water pump 1 HP', watts: 800, hours: 0.5, quantity: 0 },
-  { id: 'aircon', name: 'Aircon 1 HP', watts: 800, hours: 8, quantity: 0 },
   { id: 'heater', name: 'Water heater', watts: 3500, hours: 0.3, quantity: 0 },
 ]
 
