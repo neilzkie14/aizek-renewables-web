@@ -19,10 +19,12 @@ const isAirconSample = (id: string) => id === 'aircon-inverter'
 const initialRows = (): DraftRow[] => sampleAppliances.map((row, index) => ({
   ...row, watts: String(row.watts), hours: String(row.hours),
   // Rows revealed by "Add more appliances" get an editable name.
+  // They also start switched off (quantity 0) so revealing them doesn't change the estimate.
   editableName: index >= INITIAL_ROWS,
+  ...(index >= INITIAL_ROWS ? { quantity: 0 } : {}),
   ...(isAirconSample(row.id) ? { aircon: true, inverter: true, name: AIRCON_NAME } : {}),
 }))
-const rowName = (row: DraftRow) => row.aircon ? `${row.name}${row.inverter ? ' (inverter)' : ''}` : row.name.trim() || 'Unnamed appliance'
+const rowName = (row: DraftRow) => row.aircon ? `${row.name.trim() || 'Aircon'}${row.inverter ? ' (inverter)' : ''}` : row.name.trim() || 'Unnamed appliance'
 const INITIAL_ROWS = 10
 const ROWS_PER_CLICK = 3
 const number = (value: number, digits = 0) => new Intl.NumberFormat('en-PH', { maximumFractionDigits: digits, minimumFractionDigits: digits }).format(value)
@@ -48,7 +50,7 @@ export default function ApplianceCalculator({ onQuote }: { onQuote: (estimate: A
   const addAircon = () => {
     setRows(current => {
       const last = current.map(row => !!row.aircon).lastIndexOf(true)
-      const newRow: DraftRow = { id: `aircon-${Date.now()}`, name: AIRCON_NAME, aircon: true, inverter: true, removable: true, watts: AIRCON_WATTS.inverter, hours: '8', quantity: 1 }
+      const newRow: DraftRow = { id: `aircon-${Date.now()}`, name: AIRCON_NAME, aircon: true, inverter: true, removable: true, watts: AIRCON_WATTS.inverter, hours: '8', quantity: 0 }
       return [...current.slice(0, last + 1), newRow, ...current.slice(last + 1)]
     })
     setVisibleCount(count => count + 1)
@@ -122,7 +124,11 @@ export default function ApplianceCalculator({ onQuote }: { onQuote: (estimate: A
             onTouchEnd={row.removable ? onSwipeEnd : undefined}
             onTouchCancel={row.removable ? onSwipeEnd : undefined}>
             <th scope="row">{row.aircon ? <span className="aircon-head">
-              <span>{row.name}</span>
+              {row.removable ? <input
+                className="appliance-name-input" type="text" maxLength={40} value={row.name}
+                aria-label="Aircon name" placeholder="Aircon name"
+                onChange={event => rename(row.id, event.target.value)}
+              /> : <span>{row.name}</span>}
               <label className="inverter-toggle">Inverter <input type="checkbox" checked={!!row.inverter} onChange={event => setInverter(row.id, event.target.checked)} /></label>
               {row.removable && <button type="button" className="aircon-remove" aria-label="Remove this aircon" onClick={() => removeRow(row.id)}><X size={15} /></button>}
             </span> : row.editableName ? <input
