@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { ArrowRight, ArrowUpRight, BatteryCharging, Check, ChevronLeft, ChevronRight, ClipboardCheck, House, Menu, MessageSquare, Plus, ShieldCheck, Sun, X, Zap } from 'lucide-react'
+import { ArrowRight, ArrowUpRight, BatteryCharging, Check, ChevronLeft, ChevronRight, ClipboardCheck, House, Menu, MessageSquare, Plus, ShieldCheck, Sun, X } from 'lucide-react'
 import SolarCalculator from './components/SolarCalculator'
 import QuoteForm from './components/QuoteForm'
 import EnergyOrb from './components/EnergyOrb'
@@ -10,7 +10,7 @@ import { projects, testimonials } from './data/content'
 import type { QuoteEstimate } from './features/calculator/types'
 import type { EstimateInput, EstimateResult } from './features/calculator/calculation'
 
-function Brand() { return <a className="brand" href="#home" aria-label="AIZEK Renewables home"><span className="brand-symbol"><Sun size={32} strokeWidth={1.7} /><Zap size={17} fill="currentColor" /></span><span>AIZEK<small>RENEWABLES</small></span></a> }
+function Brand() { return <a className="brand" href="#home" aria-label="AIZEK Renewables home"><img className="brand-logo" src="/images/aizek-logo.png" alt="AIZEK Renewables" /></a> }
 const faqs = [
   ['How do I know what size solar system I need?', 'Start with your monthly consumption, electricity rate, and roof space. Our preliminary estimator provides a starting point. A detailed load analysis and site assessment are needed before a final system design.'],
   ['What’s the difference between grid-tied and hybrid?', 'Grid-tied systems work alongside your utility supply. Hybrid systems can be designed with compatible battery storage. Backup capability depends on the inverter, battery capacity, and installation design.'],
