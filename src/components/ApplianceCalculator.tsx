@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { ArrowUpRight, Info, Minus, Plus, RotateCcw } from 'lucide-react'
+import { Fragment, useState } from 'react'
+import { ArrowUpRight, Info, Minus, Plus, RotateCcw, X } from 'lucide-react'
 import {
   applianceAssumptions,
   applianceSchema,
@@ -10,8 +10,17 @@ import {
   type UsagePattern,
 } from '../features/calculator/appliances'
 
-type DraftRow = { id: string; name: string; watts: string; hours: string; quantity: number }
-const initialRows = (): DraftRow[] => sampleAppliances.map(row => ({ ...row, watts: String(row.watts), hours: String(row.hours) }))
+type DraftRow = { id: string; name: string; watts: string; hours: string; quantity: number; aircon?: boolean; inverter?: boolean; removable?: boolean }
+// Aircon rows: a tick box switches between inverter and non-inverter, using typical running watts for a 1.5 HP unit.
+const AIRCON_NAME = 'Aircon 1.5 HP'
+// Inverter watts come from the first row of the sample list; change standard watts here.
+const AIRCON_WATTS = { inverter: String(sampleAppliances.find(row => row.id === 'aircon-inverter')?.watts ?? 1000), standard: '1500' }
+const isAirconSample = (id: string) => id === 'aircon-inverter'
+const initialRows = (): DraftRow[] => sampleAppliances.map(row => ({
+  ...row, watts: String(row.watts), hours: String(row.hours),
+  ...(isAirconSample(row.id) ? { aircon: true, inverter: true, name: AIRCON_NAME } : {}),
+}))
+const rowName = (row: DraftRow) => row.aircon ? `${row.name}${row.inverter ? ' (inverter)' : ''}` : row.name
 const INITIAL_ROWS = 10
 const ROWS_PER_CLICK = 3
 const number = (value: number, digits = 0) => new Intl.NumberFormat('en-PH', { maximumFractionDigits: digits, minimumFractionDigits: digits }).format(value)
@@ -28,8 +37,25 @@ export default function ApplianceCalculator({ onQuote }: { onQuote: (estimate: A
   const quantity = (id: string, delta: number) => {
     setRows(current => current.map(row => row.id === id ? { ...row, quantity: Math.max(0, Math.min(100, row.quantity + delta)) } : row))
   }
+  const setInverter = (id: string, inverter: boolean) => {
+    setRows(current => current.map(row => row.id === id ? { ...row, inverter, watts: inverter ? AIRCON_WATTS.inverter : AIRCON_WATTS.standard } : row))
+  }
+  const addAircon = () => {
+    setRows(current => {
+      const last = current.map(row => !!row.aircon).lastIndexOf(true)
+      const newRow: DraftRow = { id: `aircon-${Date.now()}`, name: AIRCON_NAME, aircon: true, inverter: true, removable: true, watts: AIRCON_WATTS.inverter, hours: '8', quantity: 1 }
+      return [...current.slice(0, last + 1), newRow, ...current.slice(last + 1)]
+    })
+    setVisibleCount(count => count + 1)
+  }
+  const removeRow = (id: string) => {
+    setRows(current => current.filter(row => row.id !== id))
+    setVisibleCount(count => count - 1)
+  }
+  const lastAirconIndex = shownRows.map(row => !!row.aircon).lastIndexOf(true)
   const parsed = shownRows.map(row => ({
     ...row,
+    name: rowName(row),
     watts: row.quantity === 0 ? Number(row.watts) || 1 : Number(row.watts),
     hours: row.quantity === 0 ? Number(row.hours) || 0 : row.hours.trim() === '' ? NaN : Number(row.hours),
   }))
@@ -55,8 +81,12 @@ export default function ApplianceCalculator({ onQuote }: { onQuote: (estimate: A
         <thead><tr><th scope="col">Appliance</th><th scope="col">Watts</th><th scope="col">Hours / day</th><th scope="col">Qty</th></tr></thead>
         <tbody>{shownRows.map((row, index) => {
           const invalid = invalidRows.includes(index)
-          return <tr key={row.id} className={row.quantity === 0 ? 'appliance-inactive' : ''}>
-            <th scope="row">{row.name}</th>
+          return <Fragment key={row.id}><tr className={[row.quantity === 0 ? 'appliance-inactive' : '', row.aircon ? 'aircon-row' : ''].join(' ').trim()}>
+            <th scope="row">{row.aircon ? <span className="aircon-head">
+              <span>{row.name}</span>
+              <label className="inverter-toggle"><input type="checkbox" checked={!!row.inverter} onChange={event => setInverter(row.id, event.target.checked)} /> Inverter</label>
+              {row.removable && <button type="button" className="aircon-remove" aria-label="Remove this aircon" onClick={() => removeRow(row.id)}><X size={15} /></button>}
+            </span> : row.name}</th>
             <td data-label="Watts"><div className="appliance-number"><input
               type="number" inputMode="decimal" min="1" max="50000" step="any"
               aria-label={`${row.name} watts`} aria-invalid={invalid || undefined}
@@ -75,13 +105,15 @@ export default function ApplianceCalculator({ onQuote }: { onQuote: (estimate: A
               <button type="button" aria-label={`Increase ${row.name} quantity`} disabled={row.quantity === 100} onClick={() => quantity(row.id, 1)}><Plus size={13} /></button>
             </div></td>
           </tr>
+          {index === lastAirconIndex && <tr className="aircon-add-row"><td colSpan={4}><button type="button" className="aircon-add" onClick={addAircon}><Plus size={14} /> Add another aircon</button></td></tr>}
+          </Fragment>
         })}</tbody>
       </table>
       <div className="appliance-list-actions">
         {hiddenCount > 0 && <button type="button" className="appliance-add-more" onClick={() => setVisibleCount(count => Math.min(rows.length, count + ROWS_PER_CLICK))}><Plus size={15} /> Add more appliances <span>({hiddenCount} more)</span></button>}
         <button type="button" className="appliance-reset" onClick={() => { setRows(initialRows()); setPattern('balanced'); setVisibleCount(INITIAL_ROWS) }}><RotateCcw size={14} /> Reset sample</button>
       </div>
-      {invalidRows.length > 0 && <p className="appliance-error" role="alert">Check {invalidRows.map(index => rows[index].name).join(', ')}: watts must be 1–50,000 and daily hours 0–24. Complete any empty fields.</p>}
+      {invalidRows.length > 0 && <p className="appliance-error" role="alert">Check {invalidRows.map(index => rowName(shownRows[index])).join(', ')}: watts must be 1–50,000 and daily hours 0–24. Complete any empty fields.</p>}
       <fieldset className="usage-patterns">
         <legend>When do you use most of your power?</legend>
         <div className="usage-pattern-grid">{usagePatterns.map(option => <label key={option.id} className={pattern === option.id ? 'usage-pattern selected' : 'usage-pattern'}>
