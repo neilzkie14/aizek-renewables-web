@@ -139,7 +139,7 @@ export default function ApplianceCalculator({ onQuote }: { onQuote: (estimate: A
               <button type="button" aria-label={`Increase ${row.name} quantity`} disabled={row.quantity === 100} onClick={() => quantity(row.id, 1)}><Plus size={13} /></button>
             </div></td>
           </tr>
-          {index === lastAirconIndex && <tr className="aircon-add-row"><td colSpan={4}><button type="button" className="aircon-add" onClick={addAircon}><Plus size={14} /> Add aircon</button>{rows.some(row => row.removable) && <span className="swipe-hint">Swipe a row left to remove it</span>}</td></tr>}
+          {index === lastAirconIndex && <tr className="aircon-add-row"><td colSpan={4}><button type="button" className="aircon-add" onClick={addAircon}><Plus size={14} /> Add aircon</button>{rows.some(row => row.removable) && <span className="swipe-hint">Swipe left to remove row</span>}</td></tr>}
           </Fragment>
         })}</tbody>
       </table>
