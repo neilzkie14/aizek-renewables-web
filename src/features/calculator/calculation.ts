@@ -4,15 +4,16 @@ export const assumptions = {
   daysPerMonth: 365 / 12,
   peakSunHours: 4.5,
   performanceRatio: 0.8,
-  panelWatts: 550,
-  panelArea: 2.6,
+  panelWatts: 620,
+  panelArea: 2.7,
   selfConsumptionRatio: 0.7,
   defaultRate: 12,
 } as const
 
 export const estimateSchema = z.object({
-  province: z.string().trim().min(2, 'Enter your province'),
-  city: z.string().trim().min(2, 'Enter your city or municipality'),
+  // Location fields are hidden on the page for now, so they are not required.
+  province: z.string().trim(),
+  city: z.string().trim(),
   mode: z.enum(['bill', 'consumption']),
   usage: z.number().positive('Enter a value greater than zero').max(10000000, 'Please enter a smaller value'),
   rate: z.number().positive('Rate must be greater than zero').max(100, 'Check your electricity rate'),
