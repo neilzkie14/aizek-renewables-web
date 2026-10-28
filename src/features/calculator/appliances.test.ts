@@ -25,7 +25,7 @@ describe('appliance-based planning estimate', () => {
     expect(r.solarKwp).toBeCloseTo(4.96)
     expect(r.inverterKw).toBe(3)
     expect(r.nightEnergy).toBeCloseTo(7.13)
-    expect(r.batteryKwh).toBeCloseTo(10.2)
+    expect(r.batteryKwh).toBeCloseTo(10.24)
     expect(r.monthlyGeneration).toBeCloseTo(476.16)
   })
   it('recalculates when an appliance quantity changes', () => {
@@ -34,7 +34,7 @@ describe('appliance-based planning estimate', () => {
     expect(r.dailyEnergy).toBeCloseTo(30.26)
     expect(r.connectedLoad).toBe(4785)
     expect(r.solarKwp).toBeCloseTo(9.92)
-    expect(r.batteryKwh).toBeCloseTo(20.4)
+    expect(r.batteryKwh).toBeCloseTo(20.48)
   })
   it('changes battery sizing with usage timing without changing daily demand', () => {
     const day = calculateAppliances(sampleAppliances, 'daytime')

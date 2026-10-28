@@ -4,7 +4,7 @@ export const applianceAssumptions = {
   peakSunHours: 4,
   performanceRatio: 0.8,
   panelWatts: 620,
-  batteryModuleKwh: 5.1,
+  batteryModuleKwh: 5.12, // Pylontech Fidus FB-L-5.12 / Dyness DL5.0C
   // Battery losses, same as the PV System Sizing sheet
   roundTripEfficiency: 0.95,
   depthOfDischarge: 0.9,

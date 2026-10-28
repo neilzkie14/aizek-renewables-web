@@ -13,14 +13,16 @@ export const assumptions = {
 
 // Hybrid sizing from a bill, aligned with the PV System Sizing sheet.
 export const hybridAssumptions = {
-  peakLoadPerDailyKwh: 0.3, // estimated busiest-hour load (kW) per kWh used per day; calibrated on one client, review with more
-  safetyMargin: 0.25, // inverter continuous rating must cover peak load + 25%
+  householdBaseKw: 2, // fridge, lights, fans and some cooking running at the busiest hour
+  householdKwPerDailyKwh: 0.1, // extra busiest-hour load per kWh used per day
   airconRunningKw: 1.125, // 1.5 HP aircon running load, from the sheet's Index
+  firstAirconFactor: 0.85, // first aircon cooling a room down (sheet's peak-use factor)
+  extraAirconFactor: 0.5, // other aircons running steady (sheet's steady factor)
+  safetyMargin: 0.15, // inverter continuous rating must cover busiest-hour load + 15%
   airconSurgeKw: 2.25, // extra startup power of one 1.5 HP aircon
-  baseLoadKw: 1, // fridge, lights, fans etc. running alongside the aircons
   inverterPeakMultiplier: 2, // Solis hybrid peak = 2x rating for 10 s
   maxPvToInverterRatio: 1.3, // solar array may be up to 1.3x the inverter size
-  inverterSizesKw: [3, 3.6, 5, 6, 8, 12, 14, 16],
+  inverterSizesKw: [5, 6, 8, 10, 12, 16], // Solis single-phase hybrid (L-PLUS / YD-L) on the IAN Solar April 2026 price list
   roundTripEfficiency: applianceAssumptions.roundTripEfficiency,
   depthOfDischarge: applianceAssumptions.depthOfDischarge,
   batteryModuleKwh: applianceAssumptions.batteryModuleKwh,
@@ -63,7 +65,9 @@ export function calculateEstimate(raw: EstimateInput) {
   const isHybrid = input.system === 'hybrid'
   const dailyUse = monthlyConsumption / a.daysPerMonth
   const aircons = input.aircons ?? 1
-  const peakLoadKw = Math.max(dailyUse * h.peakLoadPerDailyKwh, aircons * h.airconRunningKw + h.baseLoadKw)
+  // Busiest-hour load = household base + first aircon cooling down + other aircons running steady
+  const airconLoadKw = aircons === 0 ? 0 : h.airconRunningKw * (h.firstAirconFactor + (aircons - 1) * h.extraAirconFactor)
+  const peakLoadKw = h.householdBaseKw + dailyUse * h.householdKwPerDailyKwh + airconLoadKw
   const requiredContinuousKw = peakLoadKw * (1 + h.safetyMargin)
   const requiredPeakKw = peakLoadKw + (aircons > 0 ? h.airconSurgeKw : 0)
   const minForPvKw = installedKwp / h.maxPvToInverterRatio
