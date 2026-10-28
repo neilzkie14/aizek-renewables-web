@@ -40,4 +40,18 @@ describe('preliminary solar calculation', () => {
       expect(() => calculateEstimate({ ...input, ...patch })).toThrow()
     }
   })
+  it('sizes a hybrid inverter and battery from the bill like the sizing sheet', () => {
+    const r = calculateEstimate({ ...input, mode: 'consumption', usage: 500, system: 'hybrid', battery: true, usagePattern: 'balanced', aircons: 1 })
+    expect(r.peakLoadKw).toBeCloseTo(500 / (365 / 12) * 0.3)
+    expect(r.inverterKw).toBe(8)
+    expect(r.batteryRequiredKwh).toBeCloseTo(500 / (365 / 12) * 0.5 / (0.95 * 0.9))
+    expect(r.batteryKwh).toBeCloseTo(10.2)
+  })
+  it('shows no inverter or battery for grid-tied, and no battery when unticked', () => {
+    expect(calculateEstimate(input).inverterKw).toBe(0)
+    expect(calculateEstimate(input).batteryKwh).toBe(0)
+    const noBattery = calculateEstimate({ ...input, system: 'hybrid', battery: false })
+    expect(noBattery.inverterKw).toBeGreaterThan(0)
+    expect(noBattery.batteryKwh).toBe(0)
+  })
 })
