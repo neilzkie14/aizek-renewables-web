@@ -5,6 +5,9 @@ export const applianceAssumptions = {
   performanceRatio: 0.8,
   panelWatts: 620,
   batteryModuleKwh: 5.1,
+  // Battery losses, same as the PV System Sizing sheet
+  roundTripEfficiency: 0.95,
+  depthOfDischarge: 0.9,
   simultaneousLoadRatio: 0.6,
   daysPerMonth: 30,
 } as const
@@ -19,9 +22,9 @@ export const applianceSchema = z.object({
 export type Appliance = z.infer<typeof applianceSchema>
 export type UsagePattern = 'daytime' | 'balanced' | 'nighttime'
 export const usagePatterns: { id: UsagePattern; title: string; description: string; nightShare: number }[] = [
-  { id: 'daytime', title: 'Mostly daytime', description: 'Someone is home during the day. Light use at night.', nightShare: 0.25 },
+  { id: 'daytime', title: 'Mostly daytime', description: 'Someone is home during the day. Light use at night.', nightShare: 0.35 },
   { id: 'balanced', title: 'Day and night', description: 'Aircon and appliances through the day, steady use at night.', nightShare: 0.5 },
-  { id: 'nighttime', title: 'Mostly night', description: 'Out at work by day. Heavy use in the evening.', nightShare: 0.75 },
+  { id: 'nighttime', title: 'Mostly night', description: 'Out at work by day. Heavy use in the evening.', nightShare: 0.7 },
 ]
 
 export const sampleAppliances: Appliance[] = [
@@ -52,12 +55,14 @@ export function calculateAppliances(raw: Appliance[], pattern: UsagePattern) {
   const panelCount = Math.ceil(dailyEnergy / (a.peakSunHours * a.performanceRatio) * 1000 / a.panelWatts)
   const solarKwp = panelCount * a.panelWatts / 1000
   const nightEnergy = dailyEnergy * selectedPattern.nightShare
-  const batteryModules = Math.ceil(nightEnergy / a.batteryModuleKwh)
+  // Nominal battery = night energy / (round-trip efficiency x depth of discharge), rounded up to whole modules
+  const batteryRequiredKwh = nightEnergy / (a.roundTripEfficiency * a.depthOfDischarge)
+  const batteryModules = Math.ceil(batteryRequiredKwh / a.batteryModuleKwh)
   const batteryKwh = batteryModules * a.batteryModuleKwh
   const inverterTarget = connectedLoad * a.simultaneousLoadRatio / 1000
   const inverterSizes = [3, 5, 6, 8, 10, 12, 15, 20, 30, 50, 75, 100]
   const inverterKw = dailyEnergy === 0 ? 0 : inverterSizes.find(size => size >= inverterTarget) ?? Math.ceil(inverterTarget)
   const monthlyGeneration = solarKwp * a.peakSunHours * a.performanceRatio * a.daysPerMonth
-  return { appliances: appliances.map(row => ({ ...row })), pattern, dailyEnergy, connectedLoad, panelCount, solarKwp, nightEnergy, batteryModules, batteryKwh, inverterKw, monthlyGeneration }
+  return { appliances: appliances.map(row => ({ ...row })), pattern, dailyEnergy, connectedLoad, panelCount, solarKwp, nightEnergy, batteryRequiredKwh, batteryModules, batteryKwh, inverterKw, monthlyGeneration }
 }
 export type ApplianceEstimate = ReturnType<typeof calculateAppliances>

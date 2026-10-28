@@ -34,14 +34,19 @@ describe('appliance-based planning estimate', () => {
     expect(r.dailyEnergy).toBeCloseTo(30.26)
     expect(r.connectedLoad).toBe(4785)
     expect(r.solarKwp).toBeCloseTo(9.92)
-    expect(r.batteryKwh).toBeCloseTo(15.3)
+    expect(r.batteryKwh).toBeCloseTo(20.4)
   })
   it('changes battery sizing with usage timing without changing daily demand', () => {
     const day = calculateAppliances(sampleAppliances, 'daytime')
     const night = calculateAppliances(sampleAppliances, 'nighttime')
     expect(night.dailyEnergy).toBe(day.dailyEnergy)
-    expect(night.nightEnergy).toBeCloseTo(day.nightEnergy * 3)
+    expect(night.nightEnergy).toBeCloseTo(day.nightEnergy * 2)
     expect(night.batteryKwh).toBeGreaterThan(day.batteryKwh)
+  })
+  it('sizes the battery for efficiency and depth of discharge like the sizing sheet', () => {
+    const r = calculateAppliances(referenceAppliances, 'balanced')
+    expect(r.batteryRequiredKwh).toBeCloseTo(r.nightEnergy / (0.95 * 0.9))
+    expect(r.batteryKwh).toBeGreaterThanOrEqual(r.batteryRequiredKwh)
   })
   it('returns zero sizing when no appliances consume energy', () => {
     const r = calculateAppliances(sampleAppliances.map(row => ({ ...row, quantity: 0 })), 'balanced')
