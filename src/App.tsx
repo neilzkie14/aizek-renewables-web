@@ -12,11 +12,11 @@ import type { EstimateInput, EstimateResult } from './features/calculator/calcul
 
 function Brand() { return <a className="brand" href="#home" aria-label="AIZEK Renewables home"><img className="brand-logo" src="/images/aizek-logo.png" alt="AIZEK Renewables" /></a> }
 const faqs = [
-  ['How do I know what size solar system I need?', 'Start with your monthly consumption, electricity rate, and roof space. Our preliminary estimator provides a starting point. A detailed load analysis and site assessment are needed before a final system design.'],
-  ['What’s the difference between grid-tied and hybrid?', 'Grid-tied systems work alongside your utility supply. Hybrid systems can be designed with compatible battery storage. Backup capability depends on the inverter, battery capacity, and installation design.'],
-  ['Will my solar panels work during a power outage?', 'A standard grid-tied system shuts down during an outage for safety. A suitable hybrid system may supply selected backup loads when properly configured with a battery.'],
-  ['How much can I save on my electricity bill?', 'Savings depend on your consumption timing, system size, roof conditions, local weather, and utility rate. The estimator values only assumed self-consumed energy at your entered rate and assumes no export credits.'],
-  ['How much does a solar installation cost?', 'A reliable price requires a property assessment and confirmed equipment requirements. Installation pricing, warranty terms, and financing information have not been supplied for this preview. Request a detailed quotation once the contact service is connected.'],
+  ['What system size do I need?', 'Start with your monthly consumption, electricity rate, and roof space. Our preliminary estimator provides a starting point. A detailed load analysis and site assessment are needed before a final system design.'],
+  ['Grid-tied or hybrid?', 'Grid-tied systems work alongside your utility supply. Hybrid systems can be designed with compatible battery storage. Backup capability depends on the inverter, battery capacity, and installation design.'],
+  ['Will solar work in a brownout?', 'A standard grid-tied system shuts down during an outage for safety. A suitable hybrid system may supply selected backup loads when properly configured with a battery.'],
+  ['How much will I save?', 'Savings depend on your consumption timing, system size, roof conditions, local weather, and utility rate. The estimator values only assumed self-consumed energy at your entered rate and assumes no export credits.'],
+  ['How much does solar cost?', 'A reliable price requires a property assessment and confirmed equipment requirements. Installation pricing, warranty terms, and financing information have not been supplied for this preview. Request a detailed quotation once the contact service is connected.'],
 ]
 export default function App() {
   const [menu, setMenu] = useState(false)
