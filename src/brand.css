@@ -188,7 +188,7 @@ h3{font-weight:700;font-stretch:105%}
 .hero-video-dots i{width:6px;height:6px;border-radius:50%;background:rgb(255 255 255 / 45%)}
 .hero-video-dots i.active{width:18px;border-radius:4px;background:var(--sun)}
 .hero-video-bar button{display:grid;place-items:center;width:34px;height:34px;border:1px solid rgb(255 255 255 / 45%);border-radius:50%;background:rgb(255 255 255 / 10%);color:#fff;cursor:pointer}
-@media (max-width:600px){.hero .hero-visual.hero-video{display:none}}
+@media (max-width:600px){.hero .hero-visual.hero-video{display:block;width:100%;min-height:0;margin-top:28px;padding:10px;border-radius:14px}.hero-video video{inset:10px;width:calc(100% - 20px);height:calc(100% - 20px);border-radius:10px}.hero-video-bar{left:10px;right:10px;bottom:10px;padding:24px 12px 10px;border-radius:0 0 10px 10px}.hero-video-caption strong{font-size:15px}.hero-video-caption small{font-size:12.5px}}
 
 /* ---------- Hero video: two-line caption per clip ---------- */
 .hero-video-caption{display:flex;flex-direction:column;gap:3px}
