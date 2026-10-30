@@ -177,3 +177,15 @@ h3{font-weight:700;font-stretch:105%}
 /* ---------- Shorter FAQ rows ---------- */
 .faq-list summary{font-size:17px;line-height:1.3;padding:16px 0}
 @media (max-width:600px){.faq-list summary{font-size:16px;padding:14px 0;gap:12px}}
+
+/* ---------- Hero video card (replaces the energy orb) ---------- */
+.hero .hero-visual.hero-video{position:relative;height:auto;min-height:443px;aspect-ratio:1/1;margin:0;padding:18px;border-radius:18px;overflow:hidden;background:linear-gradient(145deg,rgb(8 27 46 / 88%),rgb(5 20 36 / 92%));border:1px solid rgb(204 220 237 / 20%);box-shadow:0 22px 70px rgb(2 13 27 / 30%);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+[data-theme='light'] .hero .hero-visual.hero-video{background:linear-gradient(145deg,rgb(248 252 255 / 95%),rgb(225 237 247 / 94%));border-color:#b6cbdb;box-shadow:0 22px 60px rgb(24 61 88 / 16%)}
+.hero-video video{position:absolute;inset:18px;width:calc(100% - 36px);height:calc(100% - 36px);object-fit:cover;display:block;border-radius:12px;opacity:.6;filter:saturate(.75)}
+.hero-video-bar{position:absolute;left:18px;right:18px;bottom:18px;display:flex;align-items:center;gap:12px;padding:28px 16px 14px;border-radius:0 0 12px 12px;background:linear-gradient(0deg,rgb(5 20 36 / 85%),transparent);color:#fff;font:600 14px/1.3 var(--f-body)}
+.hero-video-bar>span:first-child{flex:1;min-width:0}
+.hero-video-dots{display:flex;gap:6px}
+.hero-video-dots i{width:6px;height:6px;border-radius:50%;background:rgb(255 255 255 / 45%)}
+.hero-video-dots i.active{width:18px;border-radius:4px;background:var(--sun)}
+.hero-video-bar button{display:grid;place-items:center;width:34px;height:34px;border:1px solid rgb(255 255 255 / 45%);border-radius:50%;background:rgb(255 255 255 / 10%);color:#fff;cursor:pointer}
+@media (max-width:600px){.hero .hero-visual.hero-video{display:none}}
