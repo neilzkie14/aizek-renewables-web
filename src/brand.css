@@ -189,3 +189,8 @@ h3{font-weight:700;font-stretch:105%}
 .hero-video-dots i.active{width:18px;border-radius:4px;background:var(--sun)}
 .hero-video-bar button{display:grid;place-items:center;width:34px;height:34px;border:1px solid rgb(255 255 255 / 45%);border-radius:50%;background:rgb(255 255 255 / 10%);color:#fff;cursor:pointer}
 @media (max-width:600px){.hero .hero-visual.hero-video{display:none}}
+
+/* ---------- Hero video: two-line caption per clip ---------- */
+.hero-video-caption{display:flex;flex-direction:column;gap:3px}
+.hero-video-caption strong{font:700 17px/1.2 var(--f-display);font-stretch:108%}
+.hero-video-caption small{font:500 13.5px/1.3 var(--f-body);color:rgb(255 255 255 / 85%)}
