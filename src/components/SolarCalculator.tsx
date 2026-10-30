@@ -30,7 +30,7 @@ export default function SolarCalculator({ onQuote, onApplianceQuote }: {
   onQuote: (input: EstimateInput, result: EstimateResult) => void
   onApplianceQuote: (estimate: ApplianceEstimate) => void
 }) {
-  const [mode, setMode] = useState<'appliances' | 'bill'>('appliances')
+  const [mode, setMode] = useState<'appliances' | 'bill'>('bill')
   return <section className="calculator-section section appliance-section" id="calculator">
     <div className="container">
       <div className="appliance-section-heading">
